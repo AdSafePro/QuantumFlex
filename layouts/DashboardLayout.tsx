@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { 
@@ -11,7 +12,8 @@ import {
   X,
   Bell,
   MoreHorizontal,
-  Activity
+  Activity,
+  MessageSquare
 } from 'lucide-react';
 import { APP_NAME } from '../constants';
 
@@ -29,7 +31,7 @@ const DashboardLayout: React.FC = () => {
     { path: '/dashboard/wallet', icon: Wallet, label: 'Billetera' },
     { path: '/dashboard/history', icon: History, label: 'Historial' },
     { path: '/dashboard/referrals', icon: Users, label: 'Referidos' },
-    // Security removed as requested, consolidated into Settings
+    { path: '/dashboard/support', icon: MessageSquare, label: 'Soporte 24/7' },
     { path: '/dashboard/settings', icon: Settings, label: 'Configuración' },
   ];
 
@@ -38,6 +40,7 @@ const DashboardLayout: React.FC = () => {
     { path: '/dashboard', icon: LayoutDashboard, label: 'Inicio' },
     { path: '/dashboard/bots', icon: Cpu, label: 'Bots' },
     { path: '/dashboard/wallet', icon: Wallet, label: 'Billetera' },
+    { path: '/dashboard/support', icon: MessageSquare, label: 'Chat' },
   ];
 
   return (

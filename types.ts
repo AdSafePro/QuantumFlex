@@ -23,15 +23,15 @@ export interface BotOperation {
 
 export interface BotModeConfig {
   id: 'standard' | 'semi' | 'perp';
-  name: string; // "Estándar (3h)", "Semi-Perpetuo (7d)", "Perpetuo (30d)"
+  name: string;
   durationLabel: string;
-  durationHours: number; // 3, 168 (7d), 720 (30d)
-  activationCost: number; // USDT cost to unlock this mode
+  durationHours: number;
+  activationCost: number;
   roiLabel: string;
   minRoi: number;
   maxRoi: number;
   capitalRelease: 'Ciclo Finalizado (3h)' | 'Fin del Periodo';
-  payoutFrequency: number; // Hours (e.g., 3)
+  payoutFrequency: number;
 }
 
 export interface Plan {
@@ -39,13 +39,13 @@ export interface Plan {
   name: string;
   minInvestment: number;
   maxInvestment: number;
-  dailyRoi: string; // Generic display
+  dailyRoi: string;
   riskLevel: 'Bajo' | 'Medio' | 'Alto';
   dailyLimit: number; 
   consumed: number; 
-  extraSlotCost: number; // Cost if daily limit reached
+  extraSlotCost: number;
   features: string[];
-  modes: BotModeConfig[]; // New configuration for specific modes
+  modes: BotModeConfig[];
 }
 
 export interface UserState {
@@ -57,4 +57,47 @@ export interface UserState {
 export interface StakingTier {
   amount: number;
   slots: number;
+}
+
+// --- NEW TYPES FOR ADMIN & SUPPORT ---
+
+export interface Transaction {
+  id: string;
+  type: 'deposit' | 'withdraw' | 'profit' | 'adjustment';
+  amount: number;
+  date: string;
+  status: 'pending' | 'completed' | 'rejected';
+  method?: string; // e.g., USDT TRC20, Admin Adjustment
+  hash?: string;
+}
+
+export interface UserProfile {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  balance: number;
+  status: 'Active' | 'Blocked';
+  joinedDate: string;
+  transactions: Transaction[];
+}
+
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'admin';
+  text: string;
+  timestamp: number;
+}
+
+export interface SupportTicket {
+  id: string;
+  userId: number;
+  username: string;
+  subject: string;
+  status: 'Active' | 'Pending' | 'Closed';
+  messages: ChatMessage[];
+  createdAt: number;
+  lastUpdated: number;
+  closedAt?: number;
 }
