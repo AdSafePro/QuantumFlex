@@ -1,3 +1,4 @@
+
 export interface ArbitrageOpportunity {
   id: string;
   pair: string;
@@ -7,18 +8,39 @@ export interface ArbitrageOpportunity {
   timestamp: number;
 }
 
+export interface BotModeConfig {
+  id: 'standard' | 'semi' | 'perp';
+  name: string; // "Estándar (3h)", "Semi-Perpetuo (7d)", "Perpetuo (30d)"
+  durationLabel: string;
+  durationHours: number; // 3, 168 (7d), 720 (30d)
+  activationCost: number; // USDT cost to unlock this mode
+  roiLabel: string;
+  minRoi: number;
+  maxRoi: number;
+  capitalRelease: 'Ciclo Finalizado (3h)' | 'Fin del Periodo';
+  payoutFrequency: number; // Hours (e.g., 3)
+}
+
 export interface Plan {
   id: string;
   name: string;
   minInvestment: number;
-  dailyRoi: string;
+  maxInvestment: number;
+  dailyRoi: string; // Generic display
   riskLevel: 'Bajo' | 'Medio' | 'Alto';
-  spotsLeft: number;
+  dailyLimit: number; 
+  consumed: number; 
   features: string[];
+  modes: BotModeConfig[]; // New configuration for specific modes
 }
 
 export interface UserState {
   isLoggedIn: boolean;
   balance: number;
   name: string;
+}
+
+export interface StakingTier {
+  amount: number;
+  slots: number;
 }

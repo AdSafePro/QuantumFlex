@@ -31,6 +31,8 @@ const Pricing: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {INVESTMENT_PLANS.map((plan, index) => {
             const isPopular = plan.id === 'pro';
+            const spotsLeft = plan.dailyLimit - plan.consumed;
+
             return (
               <div 
                 key={plan.id}
@@ -76,14 +78,14 @@ const Pricing: React.FC = () => {
                 <div className="mb-6">
                   <div className="flex justify-between text-xs text-gray-400 mb-2">
                     <span>Capacidad del Servidor</span>
-                    <span className={plan.spotsLeft < 20 ? 'text-quantum-danger font-bold' : 'text-quantum-success'}>
-                      {plan.spotsLeft} cupos restantes
+                    <span className={spotsLeft < 20 ? 'text-quantum-danger font-bold' : 'text-quantum-success'}>
+                      {spotsLeft} cupos restantes
                     </span>
                   </div>
                   <div className="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
                     <div 
-                      className={`h-full rounded-full ${plan.spotsLeft < 20 ? 'bg-quantum-danger' : 'bg-quantum-accent'}`}
-                      style={{ width: `${Math.max(10, 100 - (plan.spotsLeft * 2))}%` }}
+                      className={`h-full rounded-full ${spotsLeft < 20 ? 'bg-quantum-danger' : 'bg-quantum-accent'}`}
+                      style={{ width: `${Math.max(10, 100 - (spotsLeft * 2))}%` }}
                     ></div>
                   </div>
                 </div>

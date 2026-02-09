@@ -1,28 +1,32 @@
+
 PROYECTO: QUANTUMFLEX
 FECHA INICIO: 25 OCT 2023
-VERSION: 1.6.0 (8-Level Referral System)
+VERSION: 1.8.0 (Advanced Lifecycle & Modes)
 ESTADO: EN DESARROLLO
 
 --- REGISTRO DE CAMBIOS Y ACTUALIZACIONES ---
 
-[FASE 2.2: SISTEMA DE REFERIDOS - EXPANSIÓN A 8 NIVELES]
-1. ACTUALIZACIÓN DE NIVELES Y REQUISITOS
-   - Nivel 1: 5% (Activo por defecto).
-   - Nivel 2: 4%. Req: Depósito O (5 Refs + $200 Vol). Mantenimiento: > $100.
-   - Nivel 3: 3%. Req: Depósito Y (10 Refs + $500 Vol). Mantenimiento: > $200.
-   - Nivel 4: 2%. Req: Depósito Y (15 Refs + $3k Vol). Mantenimiento: > $1000.
-   - Nivel 5: 1%. Req: Depósito Y (20 Refs + $10k Vol). Mantenimiento: > $5000.
-   - Nivel 6: 1%. Req: Depósito Y (30 Refs + $20k Vol). Mantenimiento: > $10000.
-   - Nivel 7: 1%. Req: Depósito Y (50 Refs + $50k Vol). Mantenimiento: > $15000.
-   - Nivel 8: 1%. Req: Depósito Y (100 Refs + $100k Vol). Mantenimiento: > $20000.
+[FASE 3.1: MODOS DE BOTS Y PROBABILIDAD]
+1. CICLOS DE VIDA DE BOTS
+   - Implementados 3 modos de operación por Bot:
+     - Estándar: Ciclo único de 3 horas. Retorno de capital + ganancia al finalizar. Costo activación: $0.
+     - Semi-Perpetuo: Duración 7 días. Pago de ganancia cada 3h. Capital bloqueado hasta el final. Costo: Variable.
+     - Perpetuo: Duración 30 días. Pago de ganancia cada 3h. Capital bloqueado hasta el final. Costo: Variable.
 
-2. MÉTRICAS DE RED
-   - Implementado seguimiento de "Volumen de Bots de Referidos Directos" para las condiciones de activación.
-   - Implementado seguimiento de "Valor en Bots Activos Propios" para las condiciones de mantenimiento.
-   - Ajustes visuales en las tarjetas de nivel para soportar nombres de requisitos más largos en móviles y escritorio.
+2. PROBABILIDAD DE RETORNO (SKEWED ROI)
+   - Lógica de probabilidad implementada: 75% de probabilidad de obtener un ROI en el rango inferior (de la media hacia abajo) y 25% en el rango superior.
+   - Rangos específicos configurados por nivel:
+     - Nivel 1: 0.10%-0.30% (Std), 0.15%-0.35% (Semi), 0.20%-0.40% (Perp).
+     - Nivel 2: 0.40%-0.60% (Std), 0.45%-0.65% (Semi), 0.50%-0.70% (Perp).
+     - Nivel 3: 0.70%-1.00% (Std), 0.75%-1.05% (Semi), 0.80%-1.10% (Perp).
 
-[FASE 5: MEJORAS VISUALES Y UX]
-   - Mantenimiento general de layout en Referidos para soportar la lista expandida.
+3. INTERFAZ DE ACTIVACIÓN
+   - Nuevo Modal de Activación para seleccionar Modo e Inversión.
+   - Cálculo automático de costos de activación (Fee) + Capital.
+   - Visualización de ciclos de 3 horas en la tarjeta del bot.
+
+[FASE 2.2: SISTEMA DE REFERIDOS]
+   - (Sin cambios en esta versión, mantenida lógica v1.6.0)
 
 --- PRÓXIMOS PASOS ---
 - Integración final con Backend PHP.
