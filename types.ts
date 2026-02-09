@@ -30,6 +30,7 @@ export interface Plan {
   riskLevel: 'Bajo' | 'Medio' | 'Alto';
   dailyLimit: number; 
   consumed: number; 
+  extraSlotCost: number; // Cost if daily limit reached
   features: string[];
   modes: BotModeConfig[]; // New configuration for specific modes
 }

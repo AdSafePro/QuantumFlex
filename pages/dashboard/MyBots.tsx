@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { INVESTMENT_PLANS, STAKING_TIERS } from '../../constants';
 import { Plan, BotModeConfig } from '../../types';
-import { Play, Pause, AlertTriangle, Lock, Zap, Server, Info, X, Clock, DollarSign, CheckCircle } from 'lucide-react';
+import { Play, Pause, AlertTriangle, Lock, Zap, Server, Info, X, Clock, DollarSign, CheckCircle, Timer } from 'lucide-react';
 
 interface ActiveBot {
   id: string;
@@ -27,9 +27,12 @@ const MyBots: React.FC = () => {
   const [selectedMode, setSelectedMode] = useState<BotModeConfig | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isExtraSlotPurchase, setIsExtraSlotPurchase] = useState(false);
+
+  // COUNTDOWN STATE
+  const [timeToReset, setTimeToReset] = useState<string>('');
 
   // MOCK ACTIVE BOTS
-  // We initialize with some bots to show the UI
   const [activeBots, setActiveBots] = useState<ActiveBot[]>([
     { 
       id: 'b1', 
@@ -38,10 +41,10 @@ const MyBots: React.FC = () => {
       investment: 250, 
       profit: 4.5, 
       mode: 'standard', 
-      startTime: Date.now() - (1000 * 60 * 60), // Started 1 hour ago
-      endTime: Date.now() + (1000 * 60 * 60 * 2), // Ends in 2 hours
+      startTime: Date.now() - (1000 * 60 * 60), 
+      endTime: Date.now() + (1000 * 60 * 60 * 2), 
       lastPayout: Date.now() - (1000 * 60 * 60),
-      nextPayout: Date.now() + (1000 * 60 * 60 * 2), // 3h total cycle
+      nextPayout: Date.now() + (1000 * 60 * 60 * 2), 
       roiRange: '0.10% - 0.30%'
     },
     { 
@@ -51,18 +54,46 @@ const MyBots: React.FC = () => {
       investment: 1000, 
       profit: 145.00, 
       mode: 'perp', 
-      startTime: Date.now() - (1000 * 60 * 60 * 24 * 5), // Started 5 days ago
-      endTime: Date.now() + (1000 * 60 * 60 * 24 * 25), // Ends in 25 days
-      lastPayout: Date.now() - (1000 * 60 * 10), // Paid 10 mins ago
-      nextPayout: Date.now() + (1000 * 60 * 60 * 2.8), // Next in 2.8h
+      startTime: Date.now() - (1000 * 60 * 60 * 24 * 5),
+      endTime: Date.now() + (1000 * 60 * 60 * 24 * 25),
+      lastPayout: Date.now() - (1000 * 60 * 10), 
+      nextPayout: Date.now() + (1000 * 60 * 60 * 2.8),
       roiRange: '0.50% - 0.70%'
     }
   ]);
 
-  // UPDATE TIMERS
+  // UPDATE TIMERS (Clock & Reset Countdown)
   const [now, setNow] = useState(Date.now());
+  
   useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 1000);
+    const updateTimers = () => {
+      setNow(Date.now());
+
+      // Calculate time to next 12:00 PM NY Time
+      const now = new Date();
+      // Get current time in NY
+      const nyTimeString = now.toLocaleString("en-US", {timeZone: "America/New_York"});
+      const nyDate = new Date(nyTimeString);
+      
+      const nextReset = new Date(nyDate);
+      nextReset.setHours(12, 0, 0, 0);
+      
+      // If it's already past 12 PM in NY, target tomorrow 12 PM
+      if (nyDate > nextReset) {
+        nextReset.setDate(nextReset.getDate() + 1);
+      }
+
+      const diff = nextReset.getTime() - nyDate.getTime();
+      
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimeToReset(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+    };
+
+    const interval = setInterval(updateTimers, 1000);
+    updateTimers(); // Initial call
     return () => clearInterval(interval);
   }, []);
 
@@ -77,10 +108,11 @@ const MyBots: React.FC = () => {
   const nextTier = STAKING_TIERS.find(t => t.amount > stakedAmount);
 
   // HANDLERS
-  const openActivationModal = (plan: Plan) => {
+  const openActivationModal = (plan: Plan, isExtra: boolean = false) => {
     setSelectedPlan(plan);
-    setSelectedMode(plan.modes[0]); // Default to standard
+    setSelectedMode(plan.modes[0]); 
     setInvestmentAmount(plan.minInvestment.toString());
+    setIsExtraSlotPurchase(isExtra);
     setIsModalOpen(true);
   };
 
@@ -88,14 +120,16 @@ const MyBots: React.FC = () => {
     setIsModalOpen(false);
     setSelectedPlan(null);
     setSelectedMode(null);
+    setIsExtraSlotPurchase(false);
   };
 
   const handleActivate = () => {
     if (!selectedPlan || !selectedMode) return;
     
     const amount = Number(investmentAmount);
-    const cost = selectedMode.activationCost;
-    const totalCost = amount + cost;
+    const modeCost = selectedMode.activationCost;
+    const extraCost = isExtraSlotPurchase ? selectedPlan.extraSlotCost : 0;
+    const totalCost = amount + modeCost + extraCost;
 
     if (amount < selectedPlan.minInvestment || amount > selectedPlan.maxInvestment) {
       alert(`La inversión debe estar entre $${selectedPlan.minInvestment} y $${selectedPlan.maxInvestment}`);
@@ -118,28 +152,13 @@ const MyBots: React.FC = () => {
       startTime: Date.now(),
       endTime: Date.now() + (selectedMode.durationHours * 60 * 60 * 1000),
       lastPayout: Date.now(),
-      nextPayout: Date.now() + (3 * 60 * 60 * 1000), // First payout in 3 hours
+      nextPayout: Date.now() + (3 * 60 * 60 * 1000),
       roiRange: selectedMode.roiLabel
     };
 
     setActiveBots([...activeBots, newBot]);
     setBalance(prev => prev - totalCost);
     closeActivationModal();
-  };
-
-  // HELPER FOR SKEWED RANDOM (75% Low, 25% High)
-  // This is visualization logic. Backend would handle real payout.
-  const calculateSkewedProfit = (min: number, max: number) => {
-    const mean = (min + max) / 2;
-    const isLowRange = Math.random() < 0.75;
-    
-    if (isLowRange) {
-      // Return random between min and mean
-      return min + Math.random() * (mean - min);
-    } else {
-      // Return random between mean and max
-      return mean + Math.random() * (max - mean);
-    }
   };
 
   const formatTimeLeft = (ms: number) => {
@@ -274,7 +293,6 @@ const MyBots: React.FC = () => {
       <h2 className="text-lg font-bold text-gray-300 mt-8 mb-4 border-b border-gray-800 pb-2">Bots Operando Actualmente</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {activeBots.map((bot) => {
-          // Calculate 3-hour cycle progress
           const cycleDuration = 3 * 60 * 60 * 1000;
           const timeSincePayout = now - bot.lastPayout;
           const progressPercent = Math.min(100, (timeSincePayout / cycleDuration) * 100);
@@ -296,7 +314,6 @@ const MyBots: React.FC = () => {
                  <div className="text-right">ROI: <span className="text-quantum-success">{bot.roiRange}</span></div>
               </div>
 
-              {/* Cycle Progress Bar */}
               <div className="mb-4">
                  <div className="flex justify-between text-[10px] text-gray-500 mb-1">
                     <span>Ciclo 3h (Pago)</span>
@@ -310,7 +327,6 @@ const MyBots: React.FC = () => {
                  </div>
               </div>
 
-              {/* Total Time Left (If perp/semi) */}
               {bot.mode !== 'standard' && (
                  <div className="bg-black/30 p-2 rounded text-xs text-center text-gray-500 mb-3">
                     Expira en: <span className="text-white">{formatTimeLeft(bot.endTime - now)}</span>
@@ -324,7 +340,6 @@ const MyBots: React.FC = () => {
            </div>
         )})}
         
-        {/* Empty Slots */}
         {Array.from({ length: Math.max(0, freeSlots) }).map((_, i) => (
            <div key={`free-${i}`} className="border-2 border-dashed border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center text-gray-600 hover:border-quantum-accent/30 hover:text-quantum-accent transition-colors cursor-pointer"
              onClick={() => document.getElementById('market')?.scrollIntoView({ behavior: 'smooth'})}
@@ -349,7 +364,7 @@ const MyBots: React.FC = () => {
 
              return (
                <div key={plan.id} className={`glass-panel p-6 rounded-xl border relative
-                  ${isSoldOut ? 'border-gray-800 opacity-60' : 'border-gray-700 hover:border-quantum-accent/50'}
+                  ${isSoldOut ? 'border-yellow-900/50 bg-yellow-900/5' : 'border-gray-700 hover:border-quantum-accent/50'}
                `}>
                  <h3 className="text-lg font-bold text-white mb-1">{plan.name}</h3>
                  <div className="flex justify-between items-center mb-4">
@@ -367,24 +382,40 @@ const MyBots: React.FC = () => {
                     ))}
                  </div>
 
-                 <div className="flex justify-between text-xs text-gray-500 mb-2">
-                    <span>Cupos Hoy</span>
-                    <span className={isSoldOut ? 'text-red-500' : 'text-quantum-accent'}>
-                       {isSoldOut ? 'AGOTADO' : `${spotsLeft} disponibles`}
-                    </span>
+                 <div className="flex flex-col gap-2 mb-4">
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>Cupos Hoy</span>
+                      <span className={isSoldOut ? 'text-yellow-500 font-bold' : 'text-quantum-accent'}>
+                        {isSoldOut ? 'AGOTADO' : `${spotsLeft} disponibles`}
+                      </span>
+                    </div>
+                    {isSoldOut && (
+                      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded p-2 flex items-center gap-2">
+                        <Timer size={14} className="text-yellow-500" />
+                        <span className="text-xs text-yellow-200">Reseteo en: <span className="font-mono font-bold">{timeToReset}</span> (NY)</span>
+                      </div>
+                    )}
                  </div>
 
                  <button 
-                   onClick={() => !isSoldOut && freeSlots > 0 && openActivationModal(plan)}
-                   disabled={isSoldOut || freeSlots <= 0}
+                   onClick={() => freeSlots > 0 && openActivationModal(plan, isSoldOut)}
+                   disabled={freeSlots <= 0}
                    className={`w-full py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2
-                     ${isSoldOut || freeSlots <= 0
-                        ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
-                        : 'bg-white/10 hover:bg-quantum-accent hover:text-black text-white'
+                     ${freeSlots <= 0
+                        ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                        : isSoldOut 
+                          ? 'bg-yellow-600 hover:bg-yellow-500 text-black shadow-[0_0_15px_rgba(202,138,4,0.3)]' 
+                          : 'bg-white/10 hover:bg-quantum-accent hover:text-black text-white'
                      }
                    `}
                  >
-                   {isSoldOut ? 'Agotado (Vuelve Mañana)' : <><Play size={16} /> Configurar & Activar</>}
+                   {freeSlots <= 0 ? (
+                      'Sin Slots Libres'
+                   ) : isSoldOut ? (
+                      <><DollarSign size={16} /> Comprar Cupo Extra (+${plan.extraSlotCost})</>
+                   ) : (
+                      <><Play size={16} /> Configurar & Activar</>
+                   )}
                  </button>
                </div>
              );
@@ -450,16 +481,24 @@ const MyBots: React.FC = () => {
                  {/* Summary */}
                  <div className="bg-black/40 p-4 rounded-xl border border-white/5 space-y-2">
                     <div className="flex justify-between text-sm">
-                       <span className="text-gray-400">Costo de Activación (Fee):</span>
+                       <span className="text-gray-400">Costo de Modo (Fee):</span>
                        <span className="text-white font-bold">${selectedMode.activationCost} USD</span>
                     </div>
+                    {isExtraSlotPurchase && (
+                       <div className="flex justify-between text-sm text-yellow-500">
+                          <span className="flex items-center gap-1"><AlertTriangle size={12}/> Sobrecosto (Cupo Extra):</span>
+                          <span className="font-bold">+${selectedPlan.extraSlotCost} USD</span>
+                       </div>
+                    )}
                     <div className="flex justify-between text-sm">
                        <span className="text-gray-400">Capital a Invertir:</span>
                        <span className="text-white font-bold">${Number(investmentAmount) || 0} USD</span>
                     </div>
                     <div className="border-t border-white/10 my-2 pt-2 flex justify-between text-base">
                        <span className="text-gray-300">Total a Descontar:</span>
-                       <span className="text-quantum-accent font-bold">${(Number(investmentAmount) || 0) + selectedMode.activationCost} USD</span>
+                       <span className="text-quantum-accent font-bold">
+                          ${(Number(investmentAmount) || 0) + selectedMode.activationCost + (isExtraSlotPurchase ? selectedPlan.extraSlotCost : 0)} USD
+                       </span>
                     </div>
                  </div>
 

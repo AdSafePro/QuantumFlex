@@ -20,8 +20,9 @@ export const INVESTMENT_PLANS: Plan[] = [
     maxInvestment: 500,
     dailyRoi: 'Variable',
     riskLevel: 'Bajo',
-    dailyLimit: 125,
-    consumed: 112,
+    dailyLimit: 1000,
+    consumed: 842,
+    extraSlotCost: 1,
     features: ['Micro-operaciones', 'Sin riesgo de liquidación'],
     modes: [
       {
@@ -69,8 +70,9 @@ export const INVESTMENT_PLANS: Plan[] = [
     maxInvestment: 5000,
     dailyRoi: 'Variable',
     riskLevel: 'Medio',
-    dailyLimit: 80, 
-    consumed: 76,
+    dailyLimit: 500, 
+    consumed: 495, // Close to full
+    extraSlotCost: 3,
     features: ['Prioridad de red', 'Arbitraje triangular'],
     modes: [
       {
@@ -115,11 +117,12 @@ export const INVESTMENT_PLANS: Plan[] = [
     id: 'whale',
     name: 'Institutional Node',
     minInvestment: 5000,
-    maxInvestment: 10000, // Updated max as per prompt
+    maxInvestment: 10000,
     dailyRoi: 'Variable',
     riskLevel: 'Alto',
-    dailyLimit: 15,
-    consumed: 4,
+    dailyLimit: 200,
+    consumed: 200, // SOLD OUT - To test the Extra Slot feature
+    extraSlotCost: 10,
     features: ['VPS Dedicado', 'Mempool Access'],
     modes: [
       {
