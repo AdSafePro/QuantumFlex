@@ -1,8 +1,11 @@
 import React from 'react';
 import { INVESTMENT_PLANS } from '../constants';
 import { Check, AlertTriangle, Cpu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Pricing: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div id="plans" className="py-20 px-4 bg-black relative">
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
@@ -85,7 +88,9 @@ const Pricing: React.FC = () => {
                   </div>
                 </div>
 
-                <button className={`w-full py-4 rounded-xl font-bold transition-all duration-300
+                <button 
+                  onClick={() => navigate('/register')}
+                  className={`w-full py-4 rounded-xl font-bold transition-all duration-300
                   ${isPopular 
                     ? 'bg-quantum-accent text-quantum-900 hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
                     : 'bg-white/10 text-white hover:bg-white/20'

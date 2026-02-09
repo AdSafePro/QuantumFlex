@@ -5,15 +5,22 @@ import LiveTicker from '../components/LiveTicker';
 import Pricing from '../components/Pricing';
 import ROICalculator from '../components/ROICalculator';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-quantum-900 text-white font-sans selection:bg-quantum-accent selection:text-quantum-900">
       <Navbar />
       <Hero />
-      <LiveTicker />
+      
+      {/* Spacer / Separator */}
+      <div className="py-10 bg-gradient-to-b from-black to-quantum-900 border-t border-white/5">
+         <LiveTicker />
+      </div>
+
       <div id="features" className="py-20 bg-quantum-900">
-         {/* Features are embedded in Hero for impact, additional info can go here */}
          <div className="max-w-4xl mx-auto text-center px-4">
             <h2 className="text-3xl font-bold mb-6 text-white">¿Por qué los bancos no quieren que sepas esto?</h2>
             <p className="text-gray-400 text-lg">
@@ -27,7 +34,10 @@ const LandingPage: React.FC = () => {
       <ROICalculator />
       <div className="bg-quantum-accent/10 py-16 text-center border-y border-quantum-accent/20">
         <h3 className="text-2xl text-white font-bold mb-4">No dejes que la inflación devore tus ahorros</h3>
-        <button className="px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors">
+        <button 
+          onClick={() => navigate('/register')}
+          className="px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
+        >
           Crear Cuenta Gratuita
         </button>
       </div>

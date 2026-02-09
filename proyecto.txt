@@ -1,39 +1,28 @@
 PROYECTO: QUANTUMFLEX
 FECHA INICIO: 25 OCT 2023
-VERSION: 1.1.0 (Dashboard Beta)
+VERSION: 1.5.1 (Advanced Referral Logic)
 ESTADO: EN DESARROLLO
 
 --- REGISTRO DE CAMBIOS Y ACTUALIZACIONES ---
 
-[FASE 2: DASHBOARD & GESTIÓN DE USUARIO]
-1. ARQUITECTURA DEL DASHBOARD
-   - Implementación de `DashboardLayout` con Sidebar responsivo y Topbar.
-   - Enrutamiento anidado en React Router para una navegación fluida sin recargas.
-   - Estado local simulado para Wallet, Bots activos y Ganancias acumuladas.
+[FASE 2.1: SISTEMA DE REFERIDOS - ACTUALIZACIÓN]
+1. CONDICIONES DE MANTENIMIENTO DE NIVEL
+   - Implementado requisito obligatorio de "Valor en Bots Activos" para mantener niveles desbloqueados.
+   - Nivel 2: Req Activación (Depósito O 5 Refs) + Mantenimiento (> $50 en bots). Com: 3%.
+   - Nivel 3: Req Activación (Depósito Y 10 Refs) + Mantenimiento (> $200 en bots). Com: 2%.
+   - Nivel 4: Req Activación (Depósito Y 15 Refs) + Mantenimiento (> $1000 en bots). Com: 1%.
+   - Nivel 5: Req Activación (Depósito Y 20 Refs) + Mantenimiento (> $5000 en bots). Com: 0.5%.
+   
+2. INTERFAZ DE REFERIDOS
+   - Añadida tarjeta estadística de "Valor Bots Activos".
+   - Desglose visual en tarjetas de nivel: Se muestra por separado el estado de "Activación" (Referidos) y "Mantenimiento" (Inversión personal).
+   - Alertas visuales si se cumple la activación pero falla el mantenimiento.
 
-2. MÓDULOS DEL SISTEMA
-   - **Vista General (Stats):** Integración de Recharts para visualizar curva de ganancias. Tarjetas de saldo con efecto "Glassmorphism".
-   - **Wallet:** Interfaz de depósito (QR simulado) y retiro.
-   - **Bots Market:** Reutilización de lógica de planes para permitir "activar" bots desde el panel.
-   - **Referidos:** Interfaz de "Nivel de Agente" para gamificar la invitación de usuarios.
-   - **Seguridad:** UI para 2FA y cambio de contraseña.
+[FASE 5: MEJORAS VISUALES Y UX]
+1. CORRECCIÓN DE LAYOUT (HERO)
+   - Aumentado padding superior en Hero para evitar superposición con el Navbar fijo.
+   - Separación visual clara entre Hero y LiveTicker.
 
-3. PSICOLOGÍA APLICADA
-   - Notificaciones de "Retiros recientes" de otros usuarios en el dashboard.
-   - Barras de progreso en ganancias para incentivar la reinversión.
-   - Etiquetas de "Alto Rendimiento" en bots específicos.
-
-[INICIALIZACIÓN DEL SISTEMA - FASE 1]
-1. ESTRUCTURA DEL PROYECTO
-   - Se ha establecido la arquitectura basada en React 18 con TypeScript.
-   - Tailwind CSS para estilizado rápido.
-   - Sistema SPA listo para HestiaCP/Apache.
-
-2. UX/UI & PSICOLOGÍA DEL USUARIO
-   - "Scarcity Engines": Contadores regresivos.
-   - Live Ticker de operaciones.
-
---- PRÓXIMOS PASOS (BACKEND) ---
-- Conectar formularios del Dashboard a endpoints PHP (`/api/withdraw.php`, `/api/activate_bot.php`).
-- Persistencia de datos en MySQL.
-- Implementar Websockets reales para el Ticker en el Dashboard.
+--- PRÓXIMOS PASOS ---
+- Integración final con Backend PHP.
+- Base de datos MySQL.

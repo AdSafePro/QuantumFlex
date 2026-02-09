@@ -31,7 +31,7 @@ const Overview: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-accent relative overflow-hidden group">
+        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-accent relative overflow-hidden group transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)]">
           <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
             <DollarSign size={64} />
           </div>
@@ -42,7 +42,7 @@ const Overview: React.FC = () => {
           </p>
         </div>
 
-        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-purple-500 relative overflow-hidden group">
+        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-purple-500 relative overflow-hidden group transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]">
           <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
             <Activity size={64} />
           </div>
@@ -51,7 +51,7 @@ const Overview: React.FC = () => {
           <p className="text-purple-400 text-xs mt-2">Próximo ciclo: 2m 15s</p>
         </div>
 
-        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-gold relative overflow-hidden group">
+        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-gold relative overflow-hidden group transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(234,179,8,0.2)]">
           <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
             <Clock size={64} />
           </div>
@@ -60,7 +60,7 @@ const Overview: React.FC = () => {
           <p className="text-gray-400 text-xs mt-2">Se acredita en 00:59:00</p>
         </div>
 
-        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-danger relative overflow-hidden group">
+        <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-danger relative overflow-hidden group transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]">
           <div className="bg-quantum-danger/10 absolute inset-0 animate-pulse-fast opacity-20"></div>
           <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">Oportunidades Perdidas</p>
           <h3 className="text-xl font-bold text-gray-300 mt-1">$1,204.00</h3>
@@ -69,7 +69,7 @@ const Overview: React.FC = () => {
       </div>
 
       {/* Chart Section */}
-      <div className="glass-panel p-6 rounded-xl">
+      <div className="glass-panel p-6 rounded-xl transform transition-all duration-500 hover:border-quantum-accent/30">
         <h3 className="text-lg font-bold text-white mb-6">Rendimiento de Arbitraje (7 Días)</h3>
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
