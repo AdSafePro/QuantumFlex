@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Activity, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
@@ -6,14 +7,36 @@ import { APP_NAME } from '../../constants';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call - Reduced time for faster access
+
+    // Simulate API call delay
     setTimeout(() => {
       setLoading(false);
-      navigate('/dashboard');
+      
+      // ADMIN CHECK
+      if (formData.username === 'admin' && formData.password === 'Millonarios2026**') {
+        // Set a mock session flag
+        localStorage.setItem('isAdmin', 'true');
+        navigate('/admin');
+      } else {
+        // Standard User Login
+        localStorage.removeItem('isAdmin');
+        navigate('/dashboard');
+      }
     }, 800);
   };
 
@@ -40,6 +63,9 @@ const Login: React.FC = () => {
               <label className="block text-sm font-medium text-gray-400 mb-2">Usuario / Email</label>
               <input 
                 type="text" 
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
                 required
                 className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-quantum-accent focus:ring-1 focus:ring-quantum-accent outline-none transition-all"
                 placeholder="inversor@quantum.io"
@@ -53,6 +79,9 @@ const Login: React.FC = () => {
               </div>
               <input 
                 type="password" 
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 required
                 className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-quantum-accent focus:ring-1 focus:ring-quantum-accent outline-none transition-all"
                 placeholder="••••••••"
