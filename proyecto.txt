@@ -1,0 +1,39 @@
+PROYECTO: QUANTUMFLEX
+FECHA INICIO: 25 OCT 2023
+VERSION: 1.1.0 (Dashboard Beta)
+ESTADO: EN DESARROLLO
+
+--- REGISTRO DE CAMBIOS Y ACTUALIZACIONES ---
+
+[FASE 2: DASHBOARD & GESTIÓN DE USUARIO]
+1. ARQUITECTURA DEL DASHBOARD
+   - Implementación de `DashboardLayout` con Sidebar responsivo y Topbar.
+   - Enrutamiento anidado en React Router para una navegación fluida sin recargas.
+   - Estado local simulado para Wallet, Bots activos y Ganancias acumuladas.
+
+2. MÓDULOS DEL SISTEMA
+   - **Vista General (Stats):** Integración de Recharts para visualizar curva de ganancias. Tarjetas de saldo con efecto "Glassmorphism".
+   - **Wallet:** Interfaz de depósito (QR simulado) y retiro.
+   - **Bots Market:** Reutilización de lógica de planes para permitir "activar" bots desde el panel.
+   - **Referidos:** Interfaz de "Nivel de Agente" para gamificar la invitación de usuarios.
+   - **Seguridad:** UI para 2FA y cambio de contraseña.
+
+3. PSICOLOGÍA APLICADA
+   - Notificaciones de "Retiros recientes" de otros usuarios en el dashboard.
+   - Barras de progreso en ganancias para incentivar la reinversión.
+   - Etiquetas de "Alto Rendimiento" en bots específicos.
+
+[INICIALIZACIÓN DEL SISTEMA - FASE 1]
+1. ESTRUCTURA DEL PROYECTO
+   - Se ha establecido la arquitectura basada en React 18 con TypeScript.
+   - Tailwind CSS para estilizado rápido.
+   - Sistema SPA listo para HestiaCP/Apache.
+
+2. UX/UI & PSICOLOGÍA DEL USUARIO
+   - "Scarcity Engines": Contadores regresivos.
+   - Live Ticker de operaciones.
+
+--- PRÓXIMOS PASOS (BACKEND) ---
+- Conectar formularios del Dashboard a endpoints PHP (`/api/withdraw.php`, `/api/activate_bot.php`).
+- Persistencia de datos en MySQL.
+- Implementar Websockets reales para el Ticker en el Dashboard.
