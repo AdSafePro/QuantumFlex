@@ -8,6 +8,19 @@ export interface ArbitrageOpportunity {
   timestamp: number;
 }
 
+export interface BotOperation {
+  id: string;
+  timestamp: number;
+  pair: string;
+  type: 'Arbitrage' | 'Triangular' | 'Flash Loan';
+  exchangeA: string;
+  exchangeB: string;
+  investmentUsed: number;
+  profit: number;
+  profitPercent: number;
+  hash: string;
+}
+
 export interface BotModeConfig {
   id: 'standard' | 'semi' | 'perp';
   name: string; // "Estándar (3h)", "Semi-Perpetuo (7d)", "Perpetuo (30d)"

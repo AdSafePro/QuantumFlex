@@ -3,6 +3,9 @@ import { Plan, StakingTier } from './types';
 
 export const APP_NAME = "QuantumFlex";
 
+export const TRADING_PAIRS = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'BNB/USDT', 'XRP/USDT', 'ADA/USDT', 'DOGE/USDT', 'LTC/USDT'];
+export const EXCHANGES = ['Binance', 'Kraken', 'Coinbase', 'KuCoin', 'Huobi', 'OKX', 'Bybit', 'Bitstamp', 'Gate.io'];
+
 export const STAKING_TIERS: StakingTier[] = [
   { amount: 0, slots: 5 },
   { amount: 100, slots: 6 },
