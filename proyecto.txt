@@ -1,27 +1,28 @@
 PROYECTO: QUANTUMFLEX
 FECHA INICIO: 25 OCT 2023
-VERSION: 1.5.1 (Advanced Referral Logic)
+VERSION: 1.6.0 (8-Level Referral System)
 ESTADO: EN DESARROLLO
 
 --- REGISTRO DE CAMBIOS Y ACTUALIZACIONES ---
 
-[FASE 2.1: SISTEMA DE REFERIDOS - ACTUALIZACIÓN]
-1. CONDICIONES DE MANTENIMIENTO DE NIVEL
-   - Implementado requisito obligatorio de "Valor en Bots Activos" para mantener niveles desbloqueados.
-   - Nivel 2: Req Activación (Depósito O 5 Refs) + Mantenimiento (> $50 en bots). Com: 3%.
-   - Nivel 3: Req Activación (Depósito Y 10 Refs) + Mantenimiento (> $200 en bots). Com: 2%.
-   - Nivel 4: Req Activación (Depósito Y 15 Refs) + Mantenimiento (> $1000 en bots). Com: 1%.
-   - Nivel 5: Req Activación (Depósito Y 20 Refs) + Mantenimiento (> $5000 en bots). Com: 0.5%.
-   
-2. INTERFAZ DE REFERIDOS
-   - Añadida tarjeta estadística de "Valor Bots Activos".
-   - Desglose visual en tarjetas de nivel: Se muestra por separado el estado de "Activación" (Referidos) y "Mantenimiento" (Inversión personal).
-   - Alertas visuales si se cumple la activación pero falla el mantenimiento.
+[FASE 2.2: SISTEMA DE REFERIDOS - EXPANSIÓN A 8 NIVELES]
+1. ACTUALIZACIÓN DE NIVELES Y REQUISITOS
+   - Nivel 1: 5% (Activo por defecto).
+   - Nivel 2: 4%. Req: Depósito O (5 Refs + $200 Vol). Mantenimiento: > $100.
+   - Nivel 3: 3%. Req: Depósito Y (10 Refs + $500 Vol). Mantenimiento: > $200.
+   - Nivel 4: 2%. Req: Depósito Y (15 Refs + $3k Vol). Mantenimiento: > $1000.
+   - Nivel 5: 1%. Req: Depósito Y (20 Refs + $10k Vol). Mantenimiento: > $5000.
+   - Nivel 6: 1%. Req: Depósito Y (30 Refs + $20k Vol). Mantenimiento: > $10000.
+   - Nivel 7: 1%. Req: Depósito Y (50 Refs + $50k Vol). Mantenimiento: > $15000.
+   - Nivel 8: 1%. Req: Depósito Y (100 Refs + $100k Vol). Mantenimiento: > $20000.
+
+2. MÉTRICAS DE RED
+   - Implementado seguimiento de "Volumen de Bots de Referidos Directos" para las condiciones de activación.
+   - Implementado seguimiento de "Valor en Bots Activos Propios" para las condiciones de mantenimiento.
+   - Ajustes visuales en las tarjetas de nivel para soportar nombres de requisitos más largos en móviles y escritorio.
 
 [FASE 5: MEJORAS VISUALES Y UX]
-1. CORRECCIÓN DE LAYOUT (HERO)
-   - Aumentado padding superior en Hero para evitar superposición con el Navbar fijo.
-   - Separación visual clara entre Hero y LiveTicker.
+   - Mantenimiento general de layout en Referidos para soportar la lista expandida.
 
 --- PRÓXIMOS PASOS ---
 - Integración final con Backend PHP.
