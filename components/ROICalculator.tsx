@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { DollarSign, TrendingUp, Calendar } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
@@ -24,21 +25,21 @@ const ROICalculator: React.FC = () => {
   const finalProfit = data[data.length - 1].balance - investment;
 
   return (
-    <div id="calculator" className="py-20 px-4 bg-gradient-to-b from-quantum-900 to-black">
+    <div id="calculator" className="py-20 px-4 bg-gradient-to-b from-gray-200 to-gray-50 dark:from-quantum-900 dark:to-black transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 dark:text-white mb-4">
             Simulador de <span className="text-quantum-success">Ganancias Cuánticas</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Descubre el poder del interés compuesto diario. Nuestros bots nunca duermen.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 glass-panel p-8 rounded-2xl border border-quantum-accent/20 shadow-[0_0_50px_rgba(6,182,212,0.1)]">
+        <div className="grid md:grid-cols-2 gap-8 glass-panel p-8 rounded-2xl border border-gray-200 dark:border-quantum-accent/20 shadow-lg dark:shadow-[0_0_50px_rgba(6,182,212,0.1)]">
           <div className="space-y-8">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Inversión Inicial (USD)</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Inversión Inicial (USD)</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <DollarSign className="h-5 w-5 text-quantum-accent" />
@@ -47,7 +48,7 @@ const ROICalculator: React.FC = () => {
                   type="number"
                   value={investment}
                   onChange={(e) => setInvestment(Number(e.target.value))}
-                  className="block w-full pl-10 pr-12 py-3 bg-black/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-quantum-accent focus:border-transparent font-display text-lg"
+                  className="block w-full pl-10 pr-12 py-3 bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-quantum-accent focus:border-transparent font-display text-lg"
                 />
               </div>
               <input
@@ -56,12 +57,12 @@ const ROICalculator: React.FC = () => {
                 max="50000"
                 value={investment}
                 onChange={(e) => setInvestment(Number(e.target.value))}
-                className="w-full mt-4 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-quantum-accent"
+                className="w-full mt-4 h-2 bg-gray-300 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-quantum-accent"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Duración (Días)</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Duración (Días)</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Calendar className="h-5 w-5 text-quantum-accent" />
@@ -70,7 +71,7 @@ const ROICalculator: React.FC = () => {
                   type="number"
                   value={days}
                   onChange={(e) => setDays(Number(e.target.value))}
-                  className="block w-full pl-10 pr-12 py-3 bg-black/50 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-quantum-accent focus:border-transparent font-display text-lg"
+                  className="block w-full pl-10 pr-12 py-3 bg-white dark:bg-black/50 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-quantum-accent focus:border-transparent font-display text-lg"
                 />
               </div>
               <input
@@ -79,19 +80,19 @@ const ROICalculator: React.FC = () => {
                 max="365"
                 value={days}
                 onChange={(e) => setDays(Number(e.target.value))}
-                className="w-full mt-4 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-quantum-accent"
+                className="w-full mt-4 h-2 bg-gray-300 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-quantum-accent"
               />
             </div>
 
             <div className="bg-quantum-success/10 p-4 rounded-lg border border-quantum-success/30">
               <div className="flex justify-between items-end">
                 <div>
-                  <p className="text-sm text-gray-400">Ganancia Estimada</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Ganancia Estimada</p>
                   <p className="text-3xl font-bold text-quantum-success">+${finalProfit.toLocaleString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-400">Retorno Total</p>
-                  <p className="text-xl font-bold text-white">${(investment + finalProfit).toLocaleString()}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Retorno Total</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">${(investment + finalProfit).toLocaleString()}</p>
                 </div>
               </div>
             </div>
@@ -109,7 +110,7 @@ const ROICalculator: React.FC = () => {
                 <XAxis dataKey="day" hide />
                 <YAxis hide />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155' }}
+                  contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: '1px solid #334155', borderRadius: '8px' }}
                   itemStyle={{ color: '#06b6d4' }}
                 />
                 <Area type="monotone" dataKey="balance" stroke="#06b6d4" fillOpacity={1} fill="url(#colorBalance)" />

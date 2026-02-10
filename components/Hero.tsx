@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
     let height = canvas.height = window.innerHeight;
 
     const particles: Particle[] = [];
-    const particleCount = width < 768 ? 40 : 80; // Fewer particles on mobile
+    const particleCount = width < 768 ? 40 : 80;
 
     class Particle {
       x: number;
@@ -57,15 +57,12 @@ const Hero: React.FC = () => {
       }
 
       update(mouse: {x: number, y: number}) {
-        // Basic movement
         this.x += this.vx;
         this.y += this.vy;
 
-        // Bounce off edges
         if (this.x < 0 || this.x > width) this.vx *= -1;
         if (this.y < 0 || this.y > height) this.vy *= -1;
 
-        // Mouse interaction (Dispersal)
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -103,7 +100,6 @@ const Hero: React.FC = () => {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
       
-      // Draw connections first
       for (let i = 0; i < particles.length; i++) {
         for (let j = i; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -121,7 +117,6 @@ const Hero: React.FC = () => {
         }
       }
 
-      // Update and draw particles
       particles.forEach(p => {
         p.update(mousePos);
         p.draw();
@@ -143,24 +138,23 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [mousePos]);
 
-  // Track mouse for canvas interaction
   const handleMouseMove = (e: React.MouseEvent) => {
     setMousePos({ x: e.clientX, y: e.clientY });
   };
 
   return (
     <div 
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-40 pb-20"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-40 pb-20 bg-gray-50 dark:bg-quantum-900 transition-colors duration-300"
       onMouseMove={handleMouseMove}
     >
       {/* Canvas Background */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+        className="absolute inset-0 z-0 opacity-20 dark:opacity-40 pointer-events-none"
       />
       
-      {/* Dark Overlay for Readability */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-quantum-900/90 via-quantum-900/80 to-black pointer-events-none"></div>
+      {/* Overlay for Readability */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-gray-100/90 via-gray-100/80 to-gray-50 dark:from-quantum-900/90 dark:via-quantum-900/80 dark:to-black pointer-events-none transition-colors duration-300"></div>
       
       {/* Hero Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12">
@@ -175,14 +169,14 @@ const Hero: React.FC = () => {
             Sistema V{APP_VERSION} Ahora Activo
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight animate-fade-in-up drop-shadow-lg" style={{ animationDelay: '0.2s' }}>
+          <h1 className="text-5xl md:text-7xl font-display font-black text-gray-900 dark:text-white mb-6 tracking-tight leading-tight animate-fade-in-up drop-shadow-lg" style={{ animationDelay: '0.2s' }}>
             Arbitraje Cripto <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-quantum-accent via-white to-purple-500 neon-text">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-quantum-accent via-blue-500 to-purple-500 neon-text">
               Sin Riesgo Humano
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl font-light animate-fade-in-up drop-shadow-md" style={{ animationDelay: '0.3s' }}>
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl font-light animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             Nuestros bots analizan 50+ exchanges por milisegundo para encontrar ineficiencias de precio y ejecutar ganancias instantáneas.
           </p>
 
@@ -198,8 +192,8 @@ const Hero: React.FC = () => {
               </span>
             </button>
             
-            <div className="flex flex-col items-start bg-black/40 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
-              <span className="text-sm text-gray-400">Oferta termina en:</span>
+            <div className="flex flex-col items-start bg-white/50 dark:bg-black/40 p-4 rounded-xl border border-gray-200 dark:border-white/5 backdrop-blur-sm shadow-sm dark:shadow-none">
+              <span className="text-sm text-gray-500 dark:text-gray-400">Oferta termina en:</span>
               <div className="font-mono text-2xl font-bold text-quantum-danger">
                 00:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
               </div>
@@ -210,47 +204,47 @@ const Hero: React.FC = () => {
         {/* Right Side: AI Visuals */}
         <div className="flex-1 w-full max-w-md md:max-w-full relative h-[400px] md:h-[500px] flex items-center justify-center animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
           {/* Central AI Brain */}
-          <div className="relative z-10 w-32 h-32 md:w-48 md:h-48 bg-black/50 backdrop-blur-md rounded-full border-2 border-quantum-accent shadow-[0_0_50px_rgba(6,182,212,0.5)] flex items-center justify-center animate-pulse-fast">
+          <div className="relative z-10 w-32 h-32 md:w-48 md:h-48 bg-white/50 dark:bg-black/50 backdrop-blur-md rounded-full border-2 border-quantum-accent shadow-[0_0_50px_rgba(6,182,212,0.3)] flex items-center justify-center animate-pulse-fast">
             <Cpu size={64} className="text-quantum-accent" />
             <div className="absolute inset-0 border border-quantum-accent/30 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
           </div>
 
           {/* Orbiting Elements */}
           <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '10s' }}>
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8 bg-black/80 p-3 rounded-full border border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)] z-20">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8 bg-white dark:bg-black/80 p-3 rounded-full border border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)] z-20">
                <Bitcoin className="text-orange-500" size={32} />
             </div>
           </div>
 
           <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}>
-             <div className="absolute bottom-10 left-10 bg-black/80 p-3 rounded-full border border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] transform rotate-45 z-20">
+             <div className="absolute bottom-10 left-10 bg-white dark:bg-black/80 p-3 rounded-full border border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] transform rotate-45 z-20">
                <Coins className="text-purple-500" size={28} />
-               <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs font-bold text-purple-400">ETH</span>
+               <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs font-bold text-purple-600 dark:text-purple-400">ETH</span>
             </div>
           </div>
 
           <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '8s' }}>
-             <div className="absolute top-1/2 right-0 transform translate-x-8 bg-black/80 p-3 rounded-full border border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)] z-20">
+             <div className="absolute top-1/2 right-0 transform translate-x-8 bg-white dark:bg-black/80 p-3 rounded-full border border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)] z-20">
                <span className="font-bold text-green-500">USDT</span>
             </div>
           </div>
 
           {/* Connection Lines (Visual CSS) */}
-          <div className="absolute inset-0 rounded-full border border-white/5 w-[80%] h-[80%] top-[10%] left-[10%] animate-spin" style={{ animationDuration: '20s', borderStyle: 'dashed' }}></div>
+          <div className="absolute inset-0 rounded-full border border-gray-300 dark:border-white/5 w-[80%] h-[80%] top-[10%] left-[10%] animate-spin" style={{ animationDuration: '20s', borderStyle: 'dashed' }}></div>
           <div className="absolute inset-0 rounded-full border border-quantum-accent/10 w-[120%] h-[120%] -top-[10%] -left-[10%] animate-spin" style={{ animationDuration: '30s', animationDirection: 'reverse', borderStyle: 'dotted' }}></div>
         </div>
       </div>
 
       {/* Bottom Features Overlay */}
-      <div className="absolute bottom-0 w-full glass-panel border-t border-white/10 z-30">
+      <div className="absolute bottom-0 w-full glass-panel border-t border-gray-200 dark:border-white/10 z-30">
         <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-8">
            <div className="flex items-center gap-4 group cursor-pointer">
               <div className="bg-quantum-gold/20 p-3 rounded-full group-hover:scale-110 transition-transform">
                 <Zap className="h-6 w-6 text-quantum-gold" />
               </div>
               <div>
-                <h3 className="font-bold text-white group-hover:text-quantum-gold transition-colors">Velocidad Cuántica</h3>
-                <p className="text-xs text-gray-400">Ejecución en nanosegundos</p>
+                <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-quantum-gold transition-colors">Velocidad Cuántica</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Ejecución en nanosegundos</p>
               </div>
            </div>
            <div className="flex items-center gap-4 group cursor-pointer">
@@ -258,17 +252,17 @@ const Hero: React.FC = () => {
                 <ShieldCheck className="h-6 w-6 text-quantum-success" />
               </div>
               <div>
-                <h3 className="font-bold text-white group-hover:text-quantum-success transition-colors">Capital Asegurado</h3>
-                <p className="text-xs text-gray-400">Fondo de garantía SAFU</p>
+                <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-quantum-success transition-colors">Capital Asegurado</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Fondo de garantía SAFU</p>
               </div>
            </div>
            <div className="flex items-center gap-4 group cursor-pointer">
               <div className="bg-purple-500/20 p-3 rounded-full group-hover:scale-110 transition-transform">
-                <Globe className="h-6 w-6 text-purple-400" />
+                <Globe className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <h3 className="font-bold text-white group-hover:text-purple-400 transition-colors">Cobertura Global</h3>
-                <p className="text-xs text-gray-400">Arbitraje multi-regional</p>
+                <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">Cobertura Global</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Arbitraje multi-regional</p>
               </div>
            </div>
         </div>
