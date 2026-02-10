@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { INVESTMENT_PLANS, STAKING_TIERS, TRADING_PAIRS, EXCHANGES } from '../../constants';
 import { Plan, BotModeConfig, BotOperation } from '../../types';
 import { Play, Pause, AlertTriangle, Lock, Zap, Server, Info, X, Clock, DollarSign, CheckCircle, Timer, Activity, TrendingUp, Eye, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ActiveBot {
   id: string;
@@ -34,6 +35,7 @@ interface Notification {
 const MyBots: React.FC = () => {
   const [stakedAmount, setStakedAmount] = useState(0);
   const [balance, setBalance] = useState(12450.32);
+  const { t } = useLanguage();
   
   // ACTIVATION MODAL STATE
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
@@ -103,9 +105,6 @@ const MyBots: React.FC = () => {
             while (exB === exA) exB = EXCHANGES[Math.floor(Math.random() * EXCHANGES.length)];
             
             // Calculate a realistic small profit chunk
-            // We want roughly 6-12 ops per 3 hours. Let's say ~10 ops.
-            // Profit per op approx = TotalTarget / 10.
-            // Add randomness.
             const estimatedOps = 10;
             const baseOpProfit = bot.totalExpectedProfit / estimatedOps;
             const actualOpProfit = baseOpProfit * (0.5 + Math.random()); // Randomize between 0.5x and 1.5x of base
@@ -219,12 +218,12 @@ const MyBots: React.FC = () => {
     const totalCost = amount + modeCost + extraCost;
 
     if (amount < selectedPlan.minInvestment || amount > selectedPlan.maxInvestment) {
-      alert(`La inversión debe estar entre $${selectedPlan.minInvestment} y $${selectedPlan.maxInvestment}`);
+      alert(`Investment must be between $${selectedPlan.minInvestment} and $${selectedPlan.maxInvestment}`);
       return;
     }
 
     if (totalCost > balance) {
-      alert("Saldo insuficiente");
+      alert("Insufficient balance");
       return;
     }
 
@@ -257,7 +256,7 @@ const MyBots: React.FC = () => {
   };
 
   const formatTimeLeft = (ms: number) => {
-    if (ms <= 0) return "Finalizado";
+    if (ms <= 0) return "Done";
     const h = Math.floor(ms / (1000 * 60 * 60));
     const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
     const s = Math.floor((ms % (1000 * 60)) / 1000);
@@ -277,7 +276,7 @@ const MyBots: React.FC = () => {
              <div>
                <p className="text-xs text-quantum-accent font-bold uppercase">{notif.botName}</p>
                <p className="text-sm text-white font-bold">
-                 Operación Exitosa <span className="text-quantum-success">+{notif.profitPercent.toFixed(4)}%</span>
+                 Profit <span className="text-quantum-success">+{notif.profitPercent.toFixed(4)}%</span>
                </p>
                <div className="text-[10px] text-gray-400 mt-1 flex flex-wrap gap-1">
                  <span className="text-white">{notif.pair}</span>
@@ -292,14 +291,14 @@ const MyBots: React.FC = () => {
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-display font-bold text-white">Gestión de Nodos & Slots</h1>
-           <p className="text-gray-400 text-sm">Gestiona tu capacidad de cómputo y aumenta tus slots mediante Staking.</p>
+           <h1 className="text-2xl font-display font-bold text-white">{t('bots_mgmt_title')}</h1>
+           <p className="text-gray-400 text-sm">{t('bots_mgmt_desc')}</p>
         </div>
         <button 
            onClick={() => document.getElementById('market')?.scrollIntoView({ behavior: 'smooth'})}
            className="bg-quantum-accent text-quantum-900 px-6 py-2 rounded-lg font-bold text-sm hover:bg-white transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]"
         >
-          + Contratar Nuevo Nodo
+          {t('bots_btn_new_node')}
         </button>
       </div>
 
@@ -308,10 +307,10 @@ const MyBots: React.FC = () => {
         <div className="lg:col-span-2 glass-panel p-6 rounded-xl border border-quantum-accent/20 relative overflow-hidden">
            <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                 <Server className="text-quantum-accent" /> Capacidad del Servidor
+                 <Server className="text-quantum-accent" /> {t('bots_cap_title')}
               </h2>
               <span className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300 border border-gray-700">
-                 {usedSlots} / {totalSlots} Slots Usados
+                 {usedSlots} / {totalSlots} {t('bots_slots_used')}
               </span>
            </div>
            <div className="grid grid-cols-5 gap-3">
@@ -336,16 +335,16 @@ const MyBots: React.FC = () => {
                           <>
                              <div className="w-2 h-2 rounded-full bg-quantum-success absolute top-2 right-2 animate-pulse"></div>
                              <Zap size={20} className="text-quantum-success mb-1" />
-                             <span className="text-[10px] font-bold text-white">RUNNING</span>
+                             <span className="text-[10px] font-bold text-white">{t('bots_running')}</span>
                           </>
                        ) : !isUnlocked ? (
                           <>
                              <Lock size={18} className="text-gray-600 mb-1" />
-                             <span className="text-[10px] text-gray-600">LOCKED</span>
+                             <span className="text-[10px] text-gray-600">{t('bots_locked')}</span>
                           </>
                        ) : (
                           <>
-                             <span className="text-xs text-quantum-accent/50 font-mono">VACÍO</span>
+                             <span className="text-xs text-quantum-accent/50 font-mono">{t('bots_empty')}</span>
                              <span className="text-[9px] text-gray-500">Slot #{slotNum}</span>
                           </>
                        )}
@@ -357,11 +356,11 @@ const MyBots: React.FC = () => {
 
         <div className="glass-panel p-6 rounded-xl border border-purple-500/20 bg-gradient-to-b from-quantum-900 to-purple-900/20">
            <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
-              <Zap className="text-purple-500" /> Stake & Upgrade
+              <Zap className="text-purple-500" /> {t('bots_stake_title')}
            </h2>
            <div className="mb-6">
               <div className="flex justify-between text-sm text-gray-400 mb-1">
-                 <span>Stake Actual</span>
+                 <span>{t('bots_stake_current')}</span>
                  <span className="text-white font-bold">${stakedAmount} USD</span>
               </div>
               <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
@@ -371,11 +370,11 @@ const MyBots: React.FC = () => {
                  ></div>
               </div>
               <p className="text-xs text-purple-400 mt-2 flex items-center gap-1">
-                 Retorno Fijo del 1% Diario sobre Stake
+                 {t('bots_stake_desc')}
               </p>
            </div>
            <div className="space-y-4">
-              <label className="text-sm text-gray-300">Aumentar Stake</label>
+              <label className="text-sm text-gray-300">{t('bots_stake_increase')}</label>
               <input 
                  type="range" 
                  min="0" 
@@ -392,16 +391,16 @@ const MyBots: React.FC = () => {
            </div>
            {nextTier && (
               <div className="mt-6 p-3 bg-white/5 rounded-lg border border-white/10 text-center">
-                 <p className="text-xs text-gray-400">Próximo desbloqueo:</p>
+                 <p className="text-xs text-gray-400">{t('bots_next_unlock')}:</p>
                  <p className="text-sm font-bold text-white">Slot #{nextTier.slots}</p>
-                 <p className="text-xs text-quantum-accent">Requiere ${nextTier.amount} Stake Total</p>
+                 <p className="text-xs text-quantum-accent">{t('bots_req_stake')} ${nextTier.amount}</p>
               </div>
            )}
         </div>
       </div>
 
       {/* ACTIVE BOTS LIST */}
-      <h2 className="text-lg font-bold text-gray-300 mt-8 mb-4 border-b border-gray-800 pb-2">Bots Operando Actualmente</h2>
+      <h2 className="text-lg font-bold text-gray-300 mt-8 mb-4 border-b border-gray-800 pb-2">{t('bots_active_list_title')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {activeBots.map((bot) => {
           const cycleDuration = 3 * 60 * 60 * 1000;
@@ -417,7 +416,7 @@ const MyBots: React.FC = () => {
                      ${bot.mode === 'standard' ? 'bg-gray-700 text-gray-300' : 
                        bot.mode === 'semi' ? 'bg-blue-900 text-blue-300' : 'bg-purple-900 text-purple-300'}
                    `}>
-                     {bot.mode === 'standard' ? 'Ciclo Único' : bot.mode === 'semi' ? 'Semi-Perp' : 'Perpetuo'}
+                     {bot.mode === 'standard' ? t('bots_cycle_single') : bot.mode === 'semi' ? t('bots_cycle_semi') : t('bots_cycle_perp')}
                    </span>
                 </div>
                 
@@ -428,7 +427,7 @@ const MyBots: React.FC = () => {
 
                 <div className="mb-4">
                    <div className="flex justify-between text-[10px] text-gray-500 mb-1">
-                      <span>Ciclo 3h (Pago)</span>
+                      <span>{t('bots_cycle_payout')}</span>
                       <span className="text-quantum-accent">{formatTimeLeft(bot.nextPayout - now)}</span>
                    </div>
                    <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
@@ -441,12 +440,12 @@ const MyBots: React.FC = () => {
 
                 {bot.mode !== 'standard' && (
                    <div className="bg-black/30 p-2 rounded text-xs text-center text-gray-500 mb-3">
-                      Expira en: <span className="text-white">{formatTimeLeft(bot.endTime - now)}</span>
+                      {t('bots_expire_in')}: <span className="text-white">{formatTimeLeft(bot.endTime - now)}</span>
                    </div>
                 )}
                 
                 <div className="flex justify-between items-center bg-black/40 p-3 rounded-lg border border-white/5 mb-3">
-                   <span className="text-xs text-gray-400">Profit Generado</span>
+                   <span className="text-xs text-gray-400">{t('bots_profit_gen')}</span>
                    <span className="text-lg font-bold text-quantum-success font-mono">+${bot.profit.toFixed(4)}</span>
                 </div>
               </div>
@@ -455,7 +454,7 @@ const MyBots: React.FC = () => {
                 onClick={() => setHistoryBot(bot)}
                 className="w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-bold text-gray-300 flex items-center justify-center gap-2 transition-colors"
               >
-                <Eye size={14} /> Ver {bot.operations.length} Operaciones
+                <Eye size={14} /> {t('bots_view_ops')} ({bot.operations.length})
               </button>
            </div>
         )})}
@@ -474,36 +473,36 @@ const MyBots: React.FC = () => {
       {/* MARKETPLACE */}
       <div id="market" className="pt-10">
          <div className="flex items-center gap-2 mb-6">
-            <h2 className="text-2xl font-bold text-white">Mercado de Algoritmos</h2>
+            <h2 className="text-2xl font-bold text-white">{t('bots_market_title')}</h2>
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
            {INVESTMENT_PLANS.map((plan) => {
              const spotsLeft = plan.dailyLimit - plan.consumed;
              const isSoldOut = spotsLeft <= 0;
+             const localizedName = t(`plan_${plan.id}`) !== `plan_${plan.id}` ? t(`plan_${plan.id}`) : plan.name;
 
              return (
                <div key={plan.id} className={`glass-panel p-6 rounded-xl border relative
                   ${isSoldOut ? 'border-yellow-900/50 bg-yellow-900/5' : 'border-gray-700 hover:border-quantum-accent/50'}
                `}>
-                 <h3 className="text-lg font-bold text-white mb-1">{plan.name}</h3>
+                 <h3 className="text-lg font-bold text-white mb-1">{localizedName}</h3>
                  <div className="flex justify-between items-center mb-4">
                     <span className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300">
-                      Rango: ${plan.minInvestment} - ${plan.maxInvestment}
+                      {t('bots_range')}: ${plan.minInvestment} - ${plan.maxInvestment}
                     </span>
                  </div>
-                 {/* ... (Existing Plan UI) ... */}
                  <div className="flex flex-col gap-2 mb-4">
                     <div className="flex justify-between text-xs text-gray-500">
-                      <span>Cupos Hoy</span>
+                      <span>{t('bots_spots_today')}</span>
                       <span className={isSoldOut ? 'text-yellow-500 font-bold' : 'text-quantum-accent'}>
-                        {isSoldOut ? 'AGOTADO' : `${spotsLeft} disponibles`}
+                        {isSoldOut ? t('bots_sold_out') : `${spotsLeft} ${t('bots_available')}`}
                       </span>
                     </div>
                     {isSoldOut && (
                       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded p-2 flex items-center gap-2">
                         <Timer size={14} className="text-yellow-500" />
-                        <span className="text-xs text-yellow-200">Reseteo en: <span className="font-mono font-bold">{timeToReset}</span> (NY)</span>
+                        <span className="text-xs text-yellow-200">{t('bots_reset_in')}: <span className="font-mono font-bold">{timeToReset}</span> (NY)</span>
                       </div>
                     )}
                  </div>
@@ -521,11 +520,11 @@ const MyBots: React.FC = () => {
                    `}
                  >
                    {freeSlots <= 0 ? (
-                      'Sin Slots Libres'
+                      t('bots_no_slots')
                    ) : isSoldOut ? (
-                      <><DollarSign size={16} /> Comprar Cupo Extra (+${plan.extraSlotCost})</>
+                      <><DollarSign size={16} /> {t('bots_buy_slot')} (+${plan.extraSlotCost})</>
                    ) : (
-                      <><Play size={16} /> Configurar & Activar</>
+                      <><Play size={16} /> {t('bots_config_activate')}</>
                    )}
                  </button>
                </div>
@@ -542,7 +541,7 @@ const MyBots: React.FC = () => {
               <div className="bg-quantum-900 p-4 border-b border-white/10 flex justify-between items-center">
                  <div>
                     <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                       <Activity className="text-quantum-accent" /> Historial de Operaciones
+                       <Activity className="text-quantum-accent" /> {t('bot_hist_title')}
                     </h3>
                     <p className="text-xs text-gray-400 font-mono mt-1">
                       BOT: {historyBot.name} | ID: {historyBot.id.substring(0,8)}
@@ -555,8 +554,8 @@ const MyBots: React.FC = () => {
                  {historyBot.operations.length === 0 ? (
                    <div className="text-center py-10 text-gray-500">
                      <Clock className="mx-auto mb-2 opacity-50" size={32} />
-                     <p>Esperando primera operación...</p>
-                     <p className="text-[10px]">El bot está escaneando la mempool.</p>
+                     <p>{t('bot_hist_waiting')}</p>
+                     <p className="text-[10px]">{t('bot_hist_scanning')}</p>
                    </div>
                  ) : (
                    historyBot.operations.map((op) => (
@@ -586,9 +585,9 @@ const MyBots: React.FC = () => {
               </div>
               
               <div className="p-4 bg-black/40 border-t border-white/10 flex justify-between items-center">
-                 <span className="text-sm text-gray-400">Total Operaciones: {historyBot.operations.length}</span>
+                 <span className="text-sm text-gray-400">{t('bot_hist_total')}: {historyBot.operations.length}</span>
                  <div className="text-right">
-                    <span className="text-sm text-gray-400">Profit Acumulado: </span>
+                    <span className="text-sm text-gray-400">{t('bot_hist_accum')}: </span>
                     <span className="text-quantum-success font-bold text-lg">${historyBot.profit.toFixed(4)}</span>
                  </div>
               </div>
@@ -603,7 +602,7 @@ const MyBots: React.FC = () => {
            <div className="relative glass-panel w-full max-w-lg rounded-2xl border border-quantum-accent/30 overflow-hidden animate-fade-in-up">
               <div className="bg-quantum-900/80 p-6 border-b border-white/10 flex justify-between items-center">
                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Zap className="text-quantum-accent" /> Activar {selectedPlan.name}
+                    <Zap className="text-quantum-accent" /> {t('bot_act_title')} {selectedPlan.name}
                  </h3>
                  <button onClick={closeActivationModal} className="text-gray-400 hover:text-white"><X size={24} /></button>
               </div>
@@ -611,7 +610,7 @@ const MyBots: React.FC = () => {
               <div className="p-6 space-y-6">
                  {/* Mode Selection */}
                  <div>
-                    <label className="block text-sm text-gray-400 mb-3">Selecciona Modo de Operación</label>
+                    <label className="block text-sm text-gray-400 mb-3">{t('bot_act_sel_mode')}</label>
                     <div className="grid grid-cols-3 gap-2">
                        {selectedPlan.modes.map(mode => (
                           <button
@@ -624,7 +623,7 @@ const MyBots: React.FC = () => {
                              `}
                           >
                              <div className="text-xs font-bold mb-1">{mode.durationLabel}</div>
-                             <div className="text-[10px] opacity-80 mb-1">{mode.id === 'standard' ? 'Estándar' : mode.id === 'semi' ? 'Semi-Perp' : 'Perpetuo'}</div>
+                             <div className="text-[10px] opacity-80 mb-1">{mode.id === 'standard' ? t('bots_cycle_single') : mode.id === 'semi' ? t('bots_cycle_semi') : t('bots_cycle_perp')}</div>
                              <div className="text-[10px] text-quantum-success font-mono">{mode.roiLabel}</div>
                              {selectedMode.id === mode.id && (
                                 <div className="absolute top-1 right-1 text-quantum-accent"><CheckCircle size={12} /></div>
@@ -636,7 +635,7 @@ const MyBots: React.FC = () => {
 
                  {/* Investment Input */}
                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Monto de Inversión (USDT)</label>
+                    <label className="block text-sm text-gray-400 mb-2">{t('bot_act_inv_amount')}</label>
                     <div className="relative">
                        <span className="absolute left-3 top-3.5 text-gray-500">$</span>
                        <input 
@@ -654,21 +653,21 @@ const MyBots: React.FC = () => {
                  {/* Summary */}
                  <div className="bg-black/40 p-4 rounded-xl border border-white/5 space-y-2">
                     <div className="flex justify-between text-sm">
-                       <span className="text-gray-400">Costo de Modo (Fee):</span>
+                       <span className="text-gray-400">{t('bot_act_fee')}:</span>
                        <span className="text-white font-bold">${selectedMode.activationCost} USD</span>
                     </div>
                     {isExtraSlotPurchase && (
                        <div className="flex justify-between text-sm text-yellow-500">
-                          <span className="flex items-center gap-1"><AlertTriangle size={12}/> Sobrecosto (Cupo Extra):</span>
+                          <span className="flex items-center gap-1"><AlertTriangle size={12}/> {t('bot_act_extra_cost')}:</span>
                           <span className="font-bold">+${selectedPlan.extraSlotCost} USD</span>
                        </div>
                     )}
                     <div className="flex justify-between text-sm">
-                       <span className="text-gray-400">Capital a Invertir:</span>
+                       <span className="text-gray-400">{t('bot_act_cap_inv')}:</span>
                        <span className="text-white font-bold">${Number(investmentAmount) || 0} USD</span>
                     </div>
                     <div className="border-t border-white/10 my-2 pt-2 flex justify-between text-base">
-                       <span className="text-gray-300">Total a Descontar:</span>
+                       <span className="text-gray-300">{t('bot_act_total_deduct')}:</span>
                        <span className="text-quantum-accent font-bold">
                           ${(Number(investmentAmount) || 0) + selectedMode.activationCost + (isExtraSlotPurchase ? selectedPlan.extraSlotCost : 0)} USD
                        </span>
@@ -679,7 +678,7 @@ const MyBots: React.FC = () => {
                     onClick={handleActivate}
                     className="w-full py-4 bg-quantum-accent hover:bg-white text-black font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center justify-center gap-2"
                  >
-                    <Zap size={20} /> CONFIRMAR ACTIVACIÓN
+                    <Zap size={20} /> {t('bot_act_confirm')}
                  </button>
               </div>
            </div>

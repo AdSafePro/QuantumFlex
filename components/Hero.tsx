@@ -3,12 +3,39 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, ShieldCheck, Zap, Globe, Cpu, Bitcoin, Coins } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { APP_VERSION } from '../constants';
+import { useLanguage } from '../context/LanguageContext';
 
 const Hero: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({ m: 14, s: 59 });
   const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const { t } = useLanguage();
+
+  // Features Data Configuration
+  const features = [
+    { 
+      key: 'speed', 
+      icon: Zap, 
+      colorClass: 'text-quantum-gold', 
+      bgClass: 'bg-quantum-gold/20',
+      hoverClass: 'group-hover:text-quantum-gold'
+    },
+    { 
+      key: 'safe', 
+      icon: ShieldCheck, 
+      colorClass: 'text-quantum-success', 
+      bgClass: 'bg-quantum-success/20',
+      hoverClass: 'group-hover:text-quantum-success'
+    },
+    { 
+      key: 'global', 
+      icon: Globe, 
+      colorClass: 'text-purple-600 dark:text-purple-400', 
+      bgClass: 'bg-purple-500/20',
+      hoverClass: 'group-hover:text-purple-500 dark:group-hover:text-purple-400'
+    }
+  ];
 
   // Urgency timer countdown
   useEffect(() => {
@@ -144,7 +171,7 @@ const Hero: React.FC = () => {
 
   return (
     <div 
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-40 pb-20 bg-gray-50 dark:bg-quantum-900 transition-colors duration-300"
+      className="relative min-h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-quantum-900 transition-colors duration-300"
       onMouseMove={handleMouseMove}
     >
       {/* Canvas Background */}
@@ -156,115 +183,123 @@ const Hero: React.FC = () => {
       {/* Overlay for Readability */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-gray-100/90 via-gray-100/80 to-gray-50 dark:from-quantum-900/90 dark:via-quantum-900/80 dark:to-black pointer-events-none transition-colors duration-300"></div>
       
-      {/* Hero Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12">
-        
-        {/* Left Side: Text */}
-        <div className="flex-1 text-center md:text-left pt-6 md:pt-0">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-quantum-accent/10 border border-quantum-accent/30 text-quantum-accent text-sm font-bold mb-8 animate-fade-in-up backdrop-blur-sm" style={{ animationDelay: '0.1s' }}>
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-quantum-accent opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-quantum-accent"></span>
-            </span>
-            Sistema V{APP_VERSION} Ahora Activo
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-display font-black text-gray-900 dark:text-white mb-6 tracking-tight leading-tight animate-fade-in-up drop-shadow-lg" style={{ animationDelay: '0.2s' }}>
-            Arbitraje Cripto <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-quantum-accent via-blue-500 to-purple-500 neon-text">
-              Sin Riesgo Humano
-            </span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl font-light animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            Nuestros bots analizan 50+ exchanges por milisegundo para encontrar ineficiencias de precio y ejecutar ganancias instantáneas.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center gap-6 mb-16 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <button 
-              onClick={() => navigate('/register')}
-              className="group relative px-8 py-4 bg-quantum-accent text-quantum-900 text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 shadow-[0_0_40px_rgba(6,182,212,0.4)] cursor-pointer z-20"
-            >
-              <div className="absolute inset-0 w-full h-full bg-white/30 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12 origin-left"></div>
-              <span className="relative flex items-center gap-2">
-                INVERTIR AHORA
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+      {/* Main Content Wrapper */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center pt-28 md:pt-32 pb-10 md:pb-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col md:flex-row items-center gap-12">
+          
+          {/* Left Side: Text */}
+          <div className="flex-1 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-quantum-accent/10 border border-quantum-accent/30 text-quantum-accent text-sm font-bold mb-8 animate-fade-in-up backdrop-blur-sm" style={{ animationDelay: '0.1s' }}>
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-quantum-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-quantum-accent"></span>
               </span>
-            </button>
-            
-            <div className="flex flex-col items-start bg-white/50 dark:bg-black/40 p-4 rounded-xl border border-gray-200 dark:border-white/5 backdrop-blur-sm shadow-sm dark:shadow-none">
-              <span className="text-sm text-gray-500 dark:text-gray-400">Oferta termina en:</span>
-              <div className="font-mono text-2xl font-bold text-quantum-danger">
-                00:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
+              {t('hero_badge')}
+            </div>
+
+            <h1 className="text-5xl md:text-7xl font-display font-black text-gray-900 dark:text-white mb-6 tracking-tight leading-tight animate-fade-in-up drop-shadow-lg" style={{ animationDelay: '0.2s' }}>
+              {t('hero_title_1')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-quantum-accent via-blue-500 to-purple-500 neon-text">
+                {t('hero_title_2')}
+              </span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl font-light animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+              {t('hero_desc')}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center gap-6 mb-16 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <button 
+                onClick={() => navigate('/register')}
+                className="group relative px-8 py-4 bg-quantum-accent text-quantum-900 text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 shadow-[0_0_40px_rgba(6,182,212,0.4)] cursor-pointer z-20"
+              >
+                <div className="absolute inset-0 w-full h-full bg-white/30 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12 origin-left"></div>
+                <span className="relative flex items-center gap-2">
+                  {t('hero_cta')}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </button>
+              
+              <div className="flex flex-col items-start bg-white/50 dark:bg-black/40 p-4 rounded-xl border border-gray-200 dark:border-white/5 backdrop-blur-sm shadow-sm dark:shadow-none">
+                <span className="text-sm text-gray-500 dark:text-gray-400">{t('hero_offer')}</span>
+                <div className="font-mono text-2xl font-bold text-quantum-danger">
+                  00:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right Side: AI Visuals */}
-        <div className="flex-1 w-full max-w-md md:max-w-full relative h-[400px] md:h-[500px] flex items-center justify-center animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-          {/* Central AI Brain */}
-          <div className="relative z-10 w-32 h-32 md:w-48 md:h-48 bg-white/50 dark:bg-black/50 backdrop-blur-md rounded-full border-2 border-quantum-accent shadow-[0_0_50px_rgba(6,182,212,0.3)] flex items-center justify-center animate-pulse-fast">
-            <Cpu size={64} className="text-quantum-accent" />
-            <div className="absolute inset-0 border border-quantum-accent/30 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
-          </div>
-
-          {/* Orbiting Elements */}
-          <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '10s' }}>
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8 bg-white dark:bg-black/80 p-3 rounded-full border border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)] z-20">
-               <Bitcoin className="text-orange-500" size={32} />
+          {/* Right Side: AI Visuals */}
+          <div className="flex-1 w-full max-w-md md:max-w-full relative h-[400px] md:h-[500px] flex items-center justify-center animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+            {/* Central AI Brain */}
+            <div className="relative z-10 w-32 h-32 md:w-48 md:h-48 bg-white/50 dark:bg-black/50 backdrop-blur-md rounded-full border-2 border-quantum-accent shadow-[0_0_50px_rgba(6,182,212,0.3)] flex items-center justify-center animate-pulse-fast">
+              <Cpu size={64} className="text-quantum-accent" />
+              <div className="absolute inset-0 border border-quantum-accent/30 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
             </div>
-          </div>
 
-          <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}>
-             <div className="absolute bottom-10 left-10 bg-white dark:bg-black/80 p-3 rounded-full border border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] transform rotate-45 z-20">
-               <Coins className="text-purple-500" size={28} />
-               <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs font-bold text-purple-600 dark:text-purple-400">ETH</span>
+            {/* Orbiting Elements */}
+            <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '10s' }}>
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8 bg-white dark:bg-black/80 p-3 rounded-full border border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)] z-20">
+                 <Bitcoin className="text-orange-500" size={32} />
+              </div>
             </div>
-          </div>
 
-          <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '8s' }}>
-             <div className="absolute top-1/2 right-0 transform translate-x-8 bg-white dark:bg-black/80 p-3 rounded-full border border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)] z-20">
-               <span className="font-bold text-green-500">USDT</span>
+            <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}>
+               <div className="absolute bottom-10 left-10 bg-white dark:bg-black/80 p-3 rounded-full border border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] transform rotate-45 z-20">
+                 <Coins className="text-purple-500" size={28} />
+                 <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs font-bold text-purple-600 dark:text-purple-400">ETH</span>
+              </div>
             </div>
-          </div>
 
-          {/* Connection Lines (Visual CSS) */}
-          <div className="absolute inset-0 rounded-full border border-gray-300 dark:border-white/5 w-[80%] h-[80%] top-[10%] left-[10%] animate-spin" style={{ animationDuration: '20s', borderStyle: 'dashed' }}></div>
-          <div className="absolute inset-0 rounded-full border border-quantum-accent/10 w-[120%] h-[120%] -top-[10%] -left-[10%] animate-spin" style={{ animationDuration: '30s', animationDirection: 'reverse', borderStyle: 'dotted' }}></div>
+            <div className="absolute w-full h-full animate-spin" style={{ animationDuration: '8s' }}>
+               <div className="absolute top-1/2 right-0 transform translate-x-8 bg-white dark:bg-black/80 p-3 rounded-full border border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)] z-20">
+                 <span className="font-bold text-green-500">USDT</span>
+              </div>
+            </div>
+
+            {/* Connection Lines (Visual CSS) */}
+            <div className="absolute inset-0 rounded-full border border-gray-300 dark:border-white/5 w-[80%] h-[80%] top-[10%] left-[10%] animate-spin" style={{ animationDuration: '20s', borderStyle: 'dashed' }}></div>
+            <div className="absolute inset-0 rounded-full border border-quantum-accent/10 w-[120%] h-[120%] -top-[10%] -left-[10%] animate-spin" style={{ animationDuration: '30s', animationDirection: 'reverse', borderStyle: 'dotted' }}></div>
+          </div>
         </div>
       </div>
 
       {/* Bottom Features Overlay */}
-      <div className="absolute bottom-0 w-full glass-panel border-t border-gray-200 dark:border-white/10 z-30">
-        <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-           <div className="flex items-center gap-4 group cursor-pointer">
-              <div className="bg-quantum-gold/20 p-3 rounded-full group-hover:scale-110 transition-transform">
-                <Zap className="h-6 w-6 text-quantum-gold" />
+      <div className="w-full glass-panel border-t border-gray-200 dark:border-white/10 z-30 relative md:absolute md:bottom-0 shadow-lg md:shadow-none overflow-hidden">
+        
+        {/* Mobile: Ticker Animation (Continuous Scroll) */}
+        <div className="md:hidden py-4 flex animate-scroll whitespace-nowrap gap-4">
+           {/* Duplicate features multiple times to create the illusion of infinite scroll with the existing keyframes */}
+           {[...features, ...features, ...features].map((feat, i) => (
+              <div key={`mob-${i}`} className="inline-flex items-center gap-4 bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-4 rounded-xl min-w-[280px]">
+                  <div className={`${feat.bgClass} p-3 rounded-full`}>
+                    <feat.icon className={`h-6 w-6 ${feat.colorClass}`} />
+                  </div>
+                  <div>
+                    <h3 className={`font-bold text-gray-900 dark:text-white`}>{t(`feat_${feat.key}`)}</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 whitespace-normal">{t(`feat_${feat.key}_desc`)}</p>
+                  </div>
               </div>
-              <div>
-                <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-quantum-gold transition-colors">Velocidad Cuántica</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Ejecución en nanosegundos</p>
-              </div>
-           </div>
-           <div className="flex items-center gap-4 group cursor-pointer">
-              <div className="bg-quantum-success/20 p-3 rounded-full group-hover:scale-110 transition-transform">
-                <ShieldCheck className="h-6 w-6 text-quantum-success" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-quantum-success transition-colors">Capital Asegurado</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Fondo de garantía SAFU</p>
-              </div>
-           </div>
-           <div className="flex items-center gap-4 group cursor-pointer">
-              <div className="bg-purple-500/20 p-3 rounded-full group-hover:scale-110 transition-transform">
-                <Globe className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">Cobertura Global</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Arbitraje multi-regional</p>
-              </div>
-           </div>
+           ))}
+        </div>
+
+        {/* Desktop: Static Grid */}
+        <div className="hidden md:grid max-w-7xl mx-auto px-4 py-6 grid-cols-3 gap-8">
+           {features.map((feat) => (
+             <div key={`desk-${feat.key}`} className="flex items-center gap-4 group cursor-pointer bg-transparent transition-colors">
+                <div className={`${feat.bgClass} p-3 rounded-full group-hover:scale-110 transition-transform`}>
+                  <feat.icon className={`h-6 w-6 ${feat.colorClass}`} />
+                </div>
+                <div>
+                  <h3 className={`font-bold text-gray-900 dark:text-white ${feat.hoverClass} transition-colors`}>
+                    {t(`feat_${feat.key}`)}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {t(`feat_${feat.key}_desc`)}
+                  </p>
+                </div>
+             </div>
+           ))}
         </div>
       </div>
     </div>

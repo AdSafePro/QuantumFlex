@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, User, MessageSquare, Plus, Clock, CheckCircle } from 'lucide-react';
 import { ChatMessage, SupportTicket } from '../../types';
 import { APP_NAME } from '../../constants';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Support: React.FC = () => {
   const [tickets, setTickets] = useState<SupportTicket[]>([]);
@@ -11,6 +12,7 @@ const Support: React.FC = () => {
   const [newTicketSubject, setNewTicketSubject] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   // Load tickets from local storage for simulation between Admin/User
   useEffect(() => {
@@ -117,7 +119,7 @@ const Support: React.FC = () => {
       <div className="w-full md:w-1/3 glass-panel rounded-xl flex flex-col border border-white/10 overflow-hidden">
         <div className="p-4 border-b border-white/10 bg-black/20 flex justify-between items-center">
           <h2 className="font-bold text-white flex items-center gap-2">
-            <MessageSquare size={18} className="text-quantum-accent"/> Mis Tickets
+            <MessageSquare size={18} className="text-quantum-accent"/> {t('sup_my_tickets')}
           </h2>
           <button 
             onClick={() => setIsCreating(!isCreating)} 
@@ -131,7 +133,7 @@ const Support: React.FC = () => {
           <div className="p-4 bg-quantum-accent/5 border-b border-quantum-accent/10 animate-fade-in-down">
             <input 
               type="text" 
-              placeholder="Asunto del problema..." 
+              placeholder={t('sup_new_ph')}
               className="w-full bg-black/50 border border-gray-700 rounded p-2 text-sm text-white mb-2 outline-none focus:border-quantum-accent"
               value={newTicketSubject}
               onChange={(e) => setNewTicketSubject(e.target.value)}
@@ -142,13 +144,13 @@ const Support: React.FC = () => {
                 onClick={() => setIsCreating(false)} 
                 className="text-xs text-gray-400 hover:text-white"
               >
-                Cancelar
+                {t('sup_cancel')}
               </button>
               <button 
                 onClick={handleCreateTicket} 
                 className="text-xs bg-quantum-accent text-black font-bold px-3 py-1 rounded"
               >
-                Crear Ticket
+                {t('sup_create')}
               </button>
             </div>
           </div>
@@ -157,7 +159,7 @@ const Support: React.FC = () => {
         <div className="flex-1 overflow-y-auto">
           {tickets.length === 0 ? (
             <div className="p-8 text-center text-gray-500 text-sm">
-              No tienes tickets abiertos.
+              {t('sup_no_tickets')}
             </div>
           ) : (
             tickets.sort((a,b) => b.lastUpdated - a.lastUpdated).map(ticket => (
@@ -203,11 +205,11 @@ const Support: React.FC = () => {
             <div className="p-4 border-b border-white/10 bg-black/20 flex justify-between items-center">
               <div>
                 <h3 className="font-bold text-white">{activeTicket.subject}</h3>
-                <p className="text-xs text-gray-400">ID: {activeTicket.id}</p>
+                <p className="text-xs text-gray-400">{t('sup_id')}: {activeTicket.id}</p>
               </div>
               {activeTicket.status === 'Closed' && (
                 <div className="bg-red-500/10 text-red-500 px-3 py-1 rounded text-xs border border-red-500/20">
-                  Ticket Cerrado
+                  {t('sup_closed')}
                 </div>
               )}
             </div>
@@ -238,7 +240,7 @@ const Support: React.FC = () => {
                 <input 
                   type="text" 
                   className="flex-1 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 text-white outline-none focus:border-quantum-accent"
-                  placeholder="Escribe tu mensaje..."
+                  placeholder={t('sup_msg_ph')}
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                 />

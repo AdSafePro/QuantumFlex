@@ -15,37 +15,40 @@ import Register from './pages/auth/Register';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import SocialProofToast from './components/SocialProofToast';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <MemoryRouter>
-        <SocialProofToast />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          
-          {/* Admin Route */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          
-          {/* Dashboard Routes */}
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<Overview />} />
-            <Route path="bots" element={<MyBots />} />
-            <Route path="wallet" element={<Wallet />} />
-            <Route path="referrals" element={<Referrals />} />
-            <Route path="history" element={<History />} />
-            <Route path="support" element={<Support />} />
-            <Route path="security" element={<SettingsSecurity />} />
-            <Route path="settings" element={<SettingsSecurity />} />
-          </Route>
+    <LanguageProvider>
+      <ThemeProvider>
+        <MemoryRouter>
+          <SocialProofToast />
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            
+            {/* Admin Route */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            
+            {/* Dashboard Routes */}
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<Overview />} />
+              <Route path="bots" element={<MyBots />} />
+              <Route path="wallet" element={<Wallet />} />
+              <Route path="referrals" element={<Referrals />} />
+              <Route path="history" element={<History />} />
+              <Route path="support" element={<Support />} />
+              <Route path="security" element={<SettingsSecurity />} />
+              <Route path="settings" element={<SettingsSecurity />} />
+            </Route>
 
-          {/* Catch all redirect */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </MemoryRouter>
-    </ThemeProvider>
+            {/* Catch all redirect */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </MemoryRouter>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 };
 

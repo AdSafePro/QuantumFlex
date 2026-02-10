@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Users, Copy, Award, TrendingUp, Lock, Unlock, CheckCircle, AlertCircle, Zap, Activity, BarChart3, ChevronRight, ChevronDown, Network, User, CornerDownRight } from 'lucide-react';
 import { APP_DOMAIN } from '../../constants';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ReferralNode {
   id: string;
@@ -15,6 +16,7 @@ interface ReferralNode {
 const TreeNode: React.FC<{ node: ReferralNode }> = ({ node }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const hasChildren = node.children && node.children.length > 0;
+  const { t } = useLanguage();
 
   return (
     <div className="ml-4 md:ml-6 border-l border-white/10 pl-4 relative">
@@ -47,7 +49,7 @@ const TreeNode: React.FC<{ node: ReferralNode }> = ({ node }) => {
                 {node.username}
               </p>
               <div className="flex items-center gap-2 text-[10px] text-gray-500">
-                <span className="bg-gray-800 px-1.5 rounded text-gray-400 border border-gray-700">Nivel {node.level}</span>
+                <span className="bg-gray-800 px-1.5 rounded text-gray-400 border border-gray-700">{t('ref_level')} {node.level}</span>
                 <span>ID: {node.id}</span>
               </div>
             </div>
@@ -55,7 +57,7 @@ const TreeNode: React.FC<{ node: ReferralNode }> = ({ node }) => {
 
           <div className="flex items-center gap-4 mt-2 md:mt-0 pl-10 md:pl-0">
              <div className="text-right">
-                <p className="text-[10px] text-gray-500 uppercase">Bots Activos</p>
+                <p className="text-[10px] text-gray-500 uppercase">{t('ref_bots_active')}</p>
                 <p className={`font-mono font-bold ${node.activeInvestment > 0 ? 'text-quantum-success' : 'text-gray-600'}`}>
                   ${node.activeInvestment.toLocaleString()}
                 </p>
@@ -77,6 +79,7 @@ const TreeNode: React.FC<{ node: ReferralNode }> = ({ node }) => {
 };
 
 const Referrals: React.FC = () => {
+  const { t } = useLanguage();
   // Simulación de estado del usuario (En backend esto vendría de la DB)
   const [userStats] = useState({
     totalReferrals: 12, 
@@ -258,19 +261,19 @@ const Referrals: React.FC = () => {
   return (
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <h1 className="text-2xl font-display font-bold text-white">Programa de Socios (8 Niveles)</h1>
+        <h1 className="text-2xl font-display font-bold text-white">{t('ref_title')}</h1>
         <div className="flex items-center gap-2 px-4 py-2 bg-quantum-accent/10 border border-quantum-accent/20 rounded-full">
            <div className={`w-3 h-3 rounded-full ${userStats.hasActiveDeposit ? 'bg-quantum-success' : 'bg-gray-500'}`}></div>
            <span className="text-xs font-bold text-quantum-accent">
-             {userStats.hasActiveDeposit ? 'CUENTA ACTIVA' : 'CUENTA INACTIVA'}
+             {userStats.hasActiveDeposit ? t('ref_active_acc') : t('ref_inactive_acc')}
            </span>
         </div>
       </div>
       
       {/* Link Section */}
       <div className="glass-panel p-8 rounded-xl text-center border border-quantum-accent/30 bg-gradient-to-b from-quantum-900 to-black shadow-[0_0_30px_rgba(6,182,212,0.1)]">
-        <h2 className="text-xl text-white mb-2 font-display">Tu Enlace Cuántico de Invitación</h2>
-        <p className="text-gray-400 text-sm mb-6">Comparte este enlace para construir tu red de nodos de arbitraje.</p>
+        <h2 className="text-xl text-white mb-2 font-display">{t('ref_link_title')}</h2>
+        <p className="text-gray-400 text-sm mb-6">{t('ref_link_desc')}</p>
         
         <div className="max-w-2xl mx-auto flex gap-2">
           <input 
@@ -280,7 +283,7 @@ const Referrals: React.FC = () => {
             className="flex-1 bg-black/50 border border-quantum-accent/50 rounded-lg px-4 py-3 text-quantum-accent font-mono text-sm focus:outline-none focus:ring-2 focus:ring-quantum-accent"
           />
           <button className="bg-quantum-accent text-black px-6 py-3 rounded-lg font-bold hover:bg-white transition-colors flex items-center gap-2 shadow-lg hover:shadow-quantum-accent/50">
-            <Copy size={18} /> <span className="hidden sm:inline">Copiar</span>
+            <Copy size={18} /> <span className="hidden sm:inline">{t('ref_btn_copy')}</span>
           </button>
         </div>
       </div>
@@ -290,30 +293,30 @@ const Referrals: React.FC = () => {
         <div className="glass-panel p-6 rounded-xl border-l-4 border-l-blue-500">
            <div className="flex items-center gap-3 mb-2">
              <div className="bg-blue-500/20 p-2 rounded-lg text-blue-400"><Users size={20} /></div>
-             <p className="text-gray-400 text-xs font-bold uppercase">Socios Directos</p>
+             <p className="text-gray-400 text-xs font-bold uppercase">{t('ref_stat_direct')}</p>
            </div>
            <p className="text-2xl font-bold text-white">{userStats.totalReferrals}</p>
         </div>
         <div className="glass-panel p-6 rounded-xl border-l-4 border-l-purple-500">
            <div className="flex items-center gap-3 mb-2">
              <div className="bg-purple-500/20 p-2 rounded-lg text-purple-400"><Zap size={20} /></div>
-             <p className="text-gray-400 text-xs font-bold uppercase">Tu Inversión Activa</p>
+             <p className="text-gray-400 text-xs font-bold uppercase">{t('ref_stat_invest')}</p>
            </div>
            <p className="text-2xl font-bold text-white">${userStats.activeBotsValue}</p>
-           <p className="text-[10px] text-gray-500">Req. para mantenimiento</p>
+           <p className="text-[10px] text-gray-500">{t('ref_stat_req_maint')}</p>
         </div>
         <div className="glass-panel p-6 rounded-xl border-l-4 border-l-quantum-success">
            <div className="flex items-center gap-3 mb-2">
              <div className="bg-green-500/20 p-2 rounded-lg text-green-400"><BarChart3 size={20} /></div>
-             <p className="text-gray-400 text-xs font-bold uppercase">Volumen Referidos (N1)</p>
+             <p className="text-gray-400 text-xs font-bold uppercase">{t('ref_stat_vol')}</p>
            </div>
            <p className="text-2xl font-bold text-white">${userStats.directReferralsVolume.toLocaleString()}</p>
-           <p className="text-[10px] text-gray-500">Req. para desbloqueo</p>
+           <p className="text-[10px] text-gray-500">{t('ref_stat_req_unlock')}</p>
         </div>
         <div className="glass-panel p-6 rounded-xl border-l-4 border-l-quantum-accent">
            <div className="flex items-center gap-3 mb-2">
              <div className="bg-cyan-500/20 p-2 rounded-lg text-quantum-accent"><Award size={20} /></div>
-             <p className="text-gray-400 text-xs font-bold uppercase">Comisiones Totales</p>
+             <p className="text-gray-400 text-xs font-bold uppercase">{t('ref_stat_comm')}</p>
            </div>
            <p className="text-2xl font-bold text-quantum-accent">${userStats.totalEarnings.toLocaleString()}</p>
         </div>
@@ -322,7 +325,7 @@ const Referrals: React.FC = () => {
       {/* Level Progression System */}
       <div className="space-y-6">
         <h3 className="text-xl font-bold text-white flex items-center gap-2">
-          <Award className="text-quantum-gold" /> Mapa de Niveles y Requisitos
+          <Award className="text-quantum-gold" /> {t('ref_map_title')}
         </h3>
         
         <div className="grid gap-4">
@@ -354,14 +357,14 @@ const Referrals: React.FC = () => {
                   </div>
                   <div>
                     <h4 className={`text-base md:text-lg font-bold flex flex-wrap items-center gap-2 ${lvl.isUnlocked ? 'text-white' : 'text-gray-500'}`}>
-                      Nivel {lvl.level}
+                      {t('ref_level')} {lvl.level}
                       {lvl.isUnlocked ? (
                         <span className="text-[10px] md:text-xs bg-quantum-success/20 text-quantum-success px-2 py-0.5 rounded border border-quantum-success/30 flex items-center gap-1">
-                          <Unlock size={10} /> ACTIVO
+                          <Unlock size={10} /> {t('ref_status_active')}
                         </span>
                       ) : (
                         <span className="text-[10px] md:text-xs bg-gray-700 text-gray-400 px-2 py-0.5 rounded flex items-center gap-1">
-                          <Lock size={10} /> BLOQUEADO
+                          <Lock size={10} /> {t('ref_status_locked')}
                         </span>
                       )}
                     </h4>
@@ -374,8 +377,8 @@ const Referrals: React.FC = () => {
                     {/* Activation Requirement */}
                    <div className="bg-black/20 p-3 rounded-lg border border-white/5">
                       <div className="flex justify-between text-xs mb-1">
-                          <span className="text-gray-400 truncate pr-2" title={lvl.requirementText}>Req. Red: <span className="text-white font-medium">{lvl.requirementText}</span></span>
-                          {lvl.activationMet ? <CheckCircle size={14} className="text-quantum-success shrink-0"/> : <span className="text-gray-500 text-[10px] shrink-0">Pendiente</span>}
+                          <span className="text-gray-400 truncate pr-2" title={lvl.requirementText}>{t('ref_req_net')}: <span className="text-white font-medium">{lvl.requirementText}</span></span>
+                          {lvl.activationMet ? <CheckCircle size={14} className="text-quantum-success shrink-0"/> : <span className="text-gray-500 text-[10px] shrink-0">{t('ref_pending')}</span>}
                       </div>
                       {lvl.level > 1 && !lvl.activationMet && (
                          <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden mt-2">
@@ -390,7 +393,7 @@ const Referrals: React.FC = () => {
                    {/* Maintenance Requirement */}
                    <div className="bg-black/20 p-3 rounded-lg border border-white/5">
                       <div className="flex justify-between text-xs mb-1">
-                          <span className="text-gray-400 truncate pr-2" title={lvl.maintenanceText}>Mantenimiento: <span className="text-white font-medium">{lvl.maintenanceText}</span></span>
+                          <span className="text-gray-400 truncate pr-2" title={lvl.maintenanceText}>{t('ref_req_maint_label')}: <span className="text-white font-medium">{lvl.maintenanceText}</span></span>
                           {lvl.maintenanceMet ? <CheckCircle size={14} className="text-quantum-success shrink-0"/> : <AlertCircle size={14} className="text-quantum-danger shrink-0"/>}
                       </div>
                       {!lvl.maintenanceMet && lvl.level > 1 && (
@@ -403,7 +406,7 @@ const Referrals: React.FC = () => {
 
                 {/* Reward Rate */}
                 <div className="text-right min-w-[80px]">
-                  <p className="text-[10px] text-gray-500 uppercase font-bold">Comisión</p>
+                  <p className="text-[10px] text-gray-500 uppercase font-bold">{t('ref_comm_label')}</p>
                   <p className={`text-2xl md:text-3xl font-display font-bold ${lvl.isUnlocked ? 'text-quantum-success' : 'text-gray-600'}`}>
                     {lvl.percentage}%
                   </p>
@@ -418,7 +421,7 @@ const Referrals: React.FC = () => {
       {/* REFERRAL TREE VISUALIZATION */}
       <div className="glass-panel p-6 rounded-xl border border-quantum-accent/20">
         <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
-           <Network className="text-quantum-accent" /> Estructura de Red
+           <Network className="text-quantum-accent" /> {t('ref_net_struct')}
         </h3>
         
         <div className="overflow-x-auto">

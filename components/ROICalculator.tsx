@@ -2,11 +2,13 @@
 import React, { useState, useMemo } from 'react';
 import { DollarSign, TrendingUp, Calendar } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useLanguage } from '../context/LanguageContext';
 
 const ROICalculator: React.FC = () => {
   const [investment, setInvestment] = useState(1000);
   const [days, setDays] = useState(30);
   const dailyRate = 0.025; // 2.5% average
+  const { t } = useLanguage();
 
   const data = useMemo(() => {
     let currentBalance = investment;
@@ -29,17 +31,17 @@ const ROICalculator: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 dark:text-white mb-4">
-            Simulador de <span className="text-quantum-success">Ganancias Cuánticas</span>
+             {t('calc_title')}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Descubre el poder del interés compuesto diario. Nuestros bots nunca duermen.
+             {t('calc_desc')}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 glass-panel p-8 rounded-2xl border border-gray-200 dark:border-quantum-accent/20 shadow-lg dark:shadow-[0_0_50px_rgba(6,182,212,0.1)]">
           <div className="space-y-8">
             <div>
-              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Inversión Inicial (USD)</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">{t('calc_input_inv')}</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <DollarSign className="h-5 w-5 text-quantum-accent" />
@@ -62,7 +64,7 @@ const ROICalculator: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Duración (Días)</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">{t('calc_input_days')}</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Calendar className="h-5 w-5 text-quantum-accent" />
@@ -87,11 +89,11 @@ const ROICalculator: React.FC = () => {
             <div className="bg-quantum-success/10 p-4 rounded-lg border border-quantum-success/30">
               <div className="flex justify-between items-end">
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Ganancia Estimada</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('calc_profit')}</p>
                   <p className="text-3xl font-bold text-quantum-success">+${finalProfit.toLocaleString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Retorno Total</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('calc_total')}</p>
                   <p className="text-xl font-bold text-gray-900 dark:text-white">${(investment + finalProfit).toLocaleString()}</p>
                 </div>
               </div>
@@ -117,7 +119,7 @@ const ROICalculator: React.FC = () => {
               </AreaChart>
             </ResponsiveContainer>
             <p className="text-center text-xs text-gray-500 mt-2">
-              *Proyección basada en rendimiento histórico de los últimos 90 días.
+              {t('calc_disclaimer')}
             </p>
           </div>
         </div>

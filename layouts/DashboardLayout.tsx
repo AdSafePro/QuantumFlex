@@ -18,31 +18,33 @@ import {
 } from 'lucide-react';
 import { APP_NAME } from '../constants';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
     navigate('/');
   };
 
   const navItems = [
-    { path: '/dashboard', icon: LayoutDashboard, label: 'Estadísticas' },
-    { path: '/dashboard/bots', icon: Cpu, label: 'Mis Bots' },
-    { path: '/dashboard/wallet', icon: Wallet, label: 'Billetera' },
-    { path: '/dashboard/history', icon: History, label: 'Historial' },
-    { path: '/dashboard/referrals', icon: Users, label: 'Referidos' },
-    { path: '/dashboard/support', icon: MessageSquare, label: 'Soporte 24/7' },
-    { path: '/dashboard/settings', icon: Settings, label: 'Configuración' },
+    { path: '/dashboard', icon: LayoutDashboard, label: t('menu_stats') },
+    { path: '/dashboard/bots', icon: Cpu, label: t('menu_bots') },
+    { path: '/dashboard/wallet', icon: Wallet, label: t('menu_wallet') },
+    { path: '/dashboard/history', icon: History, label: t('menu_history') },
+    { path: '/dashboard/referrals', icon: Users, label: t('menu_referrals') },
+    { path: '/dashboard/support', icon: MessageSquare, label: t('menu_support') },
+    { path: '/dashboard/settings', icon: Settings, label: t('menu_settings') },
   ];
 
   // Mobile Bottom Nav Items (Subset)
   const mobileNavItems = [
-    { path: '/dashboard', icon: LayoutDashboard, label: 'Inicio' },
+    { path: '/dashboard', icon: LayoutDashboard, label: t('menu_stats') },
     { path: '/dashboard/bots', icon: Cpu, label: 'Bots' },
-    { path: '/dashboard/wallet', icon: Wallet, label: 'Billetera' },
+    { path: '/dashboard/wallet', icon: Wallet, label: 'Wallet' },
     { path: '/dashboard/support', icon: MessageSquare, label: 'Chat' },
   ];
 
@@ -84,7 +86,7 @@ const DashboardLayout: React.FC = () => {
             className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors"
           >
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+            {theme === 'dark' ? t('menu_theme_light') : t('menu_theme_dark')}
           </button>
 
           <button 
@@ -92,7 +94,7 @@ const DashboardLayout: React.FC = () => {
             className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300 rounded-lg transition-colors"
           >
             <LogOut size={20} />
-            Cerrar Sesión
+            {t('menu_logout')}
           </button>
         </div>
       </aside>
@@ -132,14 +134,14 @@ const DashboardLayout: React.FC = () => {
                  className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg"
               >
                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                 Cambiar Tema
+                 {t('menu_theme_dark')}
               </button>
 
               <button 
                 onClick={handleLogout}
                 className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg"
               >
-                <LogOut size={20} /> Cerrar Sesión
+                <LogOut size={20} /> {t('menu_logout')}
               </button>
            </div>
         </div>
@@ -206,7 +208,7 @@ const DashboardLayout: React.FC = () => {
                  className="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-500"
               >
                  <MoreHorizontal size={20} />
-                 <span className="text-[10px] font-medium">Más</span>
+                 <span className="text-[10px] font-medium">More</span>
               </button>
            </div>
         </div>

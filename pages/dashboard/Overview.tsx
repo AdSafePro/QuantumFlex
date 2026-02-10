@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { TrendingUp, DollarSign, Activity, Clock } from 'lucide-react';
 import LiveTicker from '../../components/LiveTicker';
+import { useLanguage } from '../../context/LanguageContext';
 
 const data = [
   { name: 'Lun', value: 4000 },
@@ -14,17 +16,19 @@ const data = [
 ];
 
 const Overview: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-display font-bold text-white">Panel de Control</h1>
-          <p className="text-gray-400 text-sm">Bienvenido de nuevo. Tus bots han estado trabajando.</p>
+          <h1 className="text-2xl font-display font-bold text-white">{t('overview_title')}</h1>
+          <p className="text-gray-400 text-sm">{t('overview_welcome')}</p>
         </div>
         <div className="flex gap-2">
            <span className="px-3 py-1 rounded-full bg-quantum-success/10 text-quantum-success text-xs font-bold border border-quantum-success/20 flex items-center gap-1 animate-pulse">
              <div className="w-2 h-2 bg-quantum-success rounded-full"></div>
-             SISTEMA OPERATIVO
+             {t('overview_system_ok')}
            </span>
         </div>
       </div>
@@ -35,7 +39,7 @@ const Overview: React.FC = () => {
           <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
             <DollarSign size={64} />
           </div>
-          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">Saldo Total</p>
+          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">{t('stat_total_balance')}</p>
           <h3 className="text-2xl font-bold text-white mt-1">$12,450.32</h3>
           <p className="text-quantum-success text-xs flex items-center mt-2">
             <TrendingUp size={12} className="mr-1" /> +$342.50 (24h)
@@ -46,31 +50,31 @@ const Overview: React.FC = () => {
           <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
             <Activity size={64} />
           </div>
-          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">Bots Activos</p>
+          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">{t('stat_active_bots')}</p>
           <h3 className="text-2xl font-bold text-white mt-1">3 <span className="text-sm text-gray-500 font-normal">/ 5 Slots</span></h3>
-          <p className="text-purple-400 text-xs mt-2">Próximo ciclo: 2m 15s</p>
+          <p className="text-purple-400 text-xs mt-2">{t('stat_next_cycle')}: 2m 15s</p>
         </div>
 
         <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-gold relative overflow-hidden group transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(234,179,8,0.2)]">
           <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform">
             <Clock size={64} />
           </div>
-          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">Ganancia Pendiente</p>
+          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">{t('stat_pending_profit')}</p>
           <h3 className="text-2xl font-bold text-white mt-1">$45.20</h3>
-          <p className="text-gray-400 text-xs mt-2">Se acredita en 00:59:00</p>
+          <p className="text-gray-400 text-xs mt-2">{t('stat_credits_in')} 00:59:00</p>
         </div>
 
         <div className="glass-panel p-5 rounded-xl border-l-4 border-l-quantum-danger relative overflow-hidden group transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]">
           <div className="bg-quantum-danger/10 absolute inset-0 animate-pulse-fast opacity-20"></div>
-          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">Oportunidades Perdidas</p>
+          <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">{t('stat_missed_opp')}</p>
           <h3 className="text-xl font-bold text-gray-300 mt-1">$1,204.00</h3>
-          <p className="text-quantum-danger text-xs mt-2">Actualiza a Plan Whale</p>
+          <p className="text-quantum-danger text-xs mt-2">{t('stat_upgrade')}</p>
         </div>
       </div>
 
       {/* Chart Section */}
       <div className="glass-panel p-6 rounded-xl transform transition-all duration-500 hover:border-quantum-accent/30">
-        <h3 className="text-lg font-bold text-white mb-6">Rendimiento de Arbitraje (7 Días)</h3>
+        <h3 className="text-lg font-bold text-white mb-6">{t('overview_chart_title')}</h3>
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
@@ -96,7 +100,7 @@ const Overview: React.FC = () => {
       {/* Live Ticker Inline */}
       <div className="glass-panel rounded-xl overflow-hidden border border-quantum-accent/20">
         <div className="bg-quantum-800 px-4 py-2 text-xs font-bold text-quantum-accent uppercase tracking-wider">
-          Ejecuciones de Mercado en Vivo
+          {t('overview_ticker_title')}
         </div>
         <LiveTicker />
       </div>

@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
 import { Copy, ArrowUpRight, ArrowDownLeft, Wallet as WalletIcon, RefreshCw, Clock, Zap, Calendar, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Wallet: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
   const [selectedCryptoDeposit, setSelectedCryptoDeposit] = useState('USDT (TRC20)');
+  const { t } = useLanguage();
   
   // WITHDRAWAL STATE
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
@@ -16,10 +18,10 @@ const Wallet: React.FC = () => {
   const withdrawalOptions = [
     {
       id: 'fast',
-      label: 'Retiro Rápido',
+      label: t('speed_fast'),
       feePercent: 7,
-      timeLabel: 'Hasta 8 Horas',
-      priority: 'Alta',
+      timeLabel: t('time_8h'),
+      priority: t('priority_high'),
       icon: Zap,
       color: 'text-quantum-danger',
       border: 'border-quantum-danger',
@@ -27,10 +29,10 @@ const Wallet: React.FC = () => {
     },
     {
       id: 'moderate',
-      label: 'Retiro Moderado',
+      label: t('speed_mod'),
       feePercent: 3,
-      timeLabel: 'Hasta 24 Horas',
-      priority: 'Media',
+      timeLabel: t('time_24h'),
+      priority: t('priority_med'),
       icon: Clock,
       color: 'text-quantum-gold',
       border: 'border-quantum-gold',
@@ -38,10 +40,10 @@ const Wallet: React.FC = () => {
     },
     {
       id: 'free',
-      label: 'Sin Costo',
+      label: t('speed_free'),
       feePercent: 0,
-      timeLabel: 'Hasta 3 Días',
-      priority: 'Baja',
+      timeLabel: t('time_3d'),
+      priority: t('priority_low'),
       icon: Calendar,
       color: 'text-quantum-success',
       border: 'border-quantum-success',
@@ -72,7 +74,7 @@ const Wallet: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      <h1 className="text-2xl font-display font-bold text-white">Billetera Digital</h1>
+      <h1 className="text-2xl font-display font-bold text-white">{t('wallet_title')}</h1>
 
       {/* Balance Card */}
       <div className="bg-gradient-to-r from-quantum-800 to-black p-8 rounded-2xl border border-quantum-accent/20 shadow-lg relative overflow-hidden">
@@ -80,7 +82,7 @@ const Wallet: React.FC = () => {
           <WalletIcon size={120} />
         </div>
         <div className="relative z-10">
-          <p className="text-gray-400 text-sm mb-1">Saldo Disponible</p>
+          <p className="text-gray-400 text-sm mb-1">{t('wallet_balance')}</p>
           <div className="flex items-baseline gap-2 mb-6">
             <span className="text-4xl font-bold text-white">$12,450.32</span>
             <span className="text-sm text-gray-500">USD</span>
@@ -90,13 +92,13 @@ const Wallet: React.FC = () => {
               onClick={() => setActiveTab('deposit')}
               className={`flex items-center gap-2 px-6 py-2 rounded-lg font-bold transition-colors ${activeTab === 'deposit' ? 'bg-quantum-accent text-black' : 'bg-white/10 text-white hover:bg-white/20'}`}
             >
-              <ArrowDownLeft size={18} /> Depositar
+              <ArrowDownLeft size={18} /> {t('wallet_btn_deposit')}
             </button>
             <button 
               onClick={() => setActiveTab('withdraw')}
               className={`flex items-center gap-2 px-6 py-2 rounded-lg font-bold transition-colors ${activeTab === 'withdraw' ? 'bg-quantum-danger text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
             >
-              <ArrowUpRight size={18} /> Retirar
+              <ArrowUpRight size={18} /> {t('wallet_btn_withdraw')}
             </button>
           </div>
         </div>
@@ -105,11 +107,11 @@ const Wallet: React.FC = () => {
       <div className="glass-panel rounded-xl overflow-hidden min-h-[500px]">
         {activeTab === 'deposit' ? (
           <div className="p-6 md:p-8 animate-fade-in-up">
-            <h2 className="text-xl font-bold text-white mb-6">Depositar Fondos</h2>
+            <h2 className="text-xl font-bold text-white mb-6">{t('wallet_dep_title')}</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Seleccionar Red</label>
+                  <label className="block text-sm text-gray-400 mb-2">{t('wallet_net_select')}</label>
                   <select 
                     value={selectedCryptoDeposit}
                     onChange={(e) => setSelectedCryptoDeposit(e.target.value)}
@@ -121,7 +123,7 @@ const Wallet: React.FC = () => {
                   </select>
                 </div>
                 <div className="bg-quantum-accent/5 border border-quantum-accent/20 p-4 rounded-lg">
-                  <p className="text-xs text-quantum-accent mb-2">Dirección de Depósito</p>
+                  <p className="text-xs text-quantum-accent mb-2">{t('wallet_addr_title')}</p>
                   <div className="flex items-center gap-2 bg-black/50 p-2 rounded border border-gray-700">
                     <code className="text-sm text-gray-300 truncate flex-1">TYxD5...8j2K9sL3mN7</code>
                     <button className="text-gray-400 hover:text-white p-1">
@@ -137,19 +139,19 @@ const Wallet: React.FC = () => {
                  <div className="w-48 h-48 bg-gray-900 mb-2 flex items-center justify-center text-gray-500 text-xs">
                    [QR CODE PLACEHOLDER]
                  </div>
-                 <p className="text-black text-sm font-bold">Escanear para pagar</p>
+                 <p className="text-black text-sm font-bold">{t('wallet_scan')}</p>
               </div>
             </div>
           </div>
         ) : (
           <div className="p-6 md:p-8 animate-fade-in-up">
-            <h2 className="text-xl font-bold text-white mb-6">Retirar Ganancias</h2>
+            <h2 className="text-xl font-bold text-white mb-6">{t('wallet_with_title')}</h2>
              <div className="grid lg:grid-cols-2 gap-8">
                 
                 {/* LEFT COLUMN: FORM */}
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Moneda y Red</label>
+                    <label className="block text-sm text-gray-400 mb-2">{t('wallet_net_select')}</label>
                     <select 
                       value={withdrawNetwork}
                       onChange={(e) => setWithdrawNetwork(e.target.value)}
@@ -162,7 +164,7 @@ const Wallet: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Monto a retirar (USD)</label>
+                    <label className="block text-sm text-gray-400 mb-2">{t('wallet_amount')}</label>
                     <div className="relative">
                       <span className="absolute left-4 top-3 text-gray-500">$</span>
                       <input 
@@ -182,7 +184,7 @@ const Wallet: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">Dirección de Billetera</label>
+                    <label className="block text-sm text-gray-400 mb-2">{t('wallet_addr_input')}</label>
                     <input 
                       type="text" 
                       value={withdrawAddress}
@@ -196,7 +198,7 @@ const Wallet: React.FC = () => {
                 {/* RIGHT COLUMN: SPEED & SUMMARY */}
                 <div className="space-y-6">
                    <div>
-                     <label className="block text-sm text-gray-400 mb-2">Prioridad de Procesamiento</label>
+                     <label className="block text-sm text-gray-400 mb-2">{t('wallet_priority')}</label>
                      <div className="space-y-2">
                         {withdrawalOptions.map((opt) => (
                           <div 
@@ -218,7 +220,7 @@ const Wallet: React.FC = () => {
                                 </div>
                              </div>
                              <div className="text-right">
-                                <p className="font-bold text-white text-sm">Fee: {opt.feePercent}%</p>
+                                <p className="font-bold text-white text-sm">{t('wallet_fee')}: {opt.feePercent}%</p>
                                 <p className="text-[10px] text-gray-500">Prioridad {opt.priority}</p>
                              </div>
                           </div>
@@ -233,11 +235,11 @@ const Wallet: React.FC = () => {
                         <span className="text-white font-bold">${amountVal.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
                       </div>
                       <div className="flex justify-between text-sm mb-2">
-                        <span className="text-gray-400">Fee de Procesamiento ({currentOption.feePercent}%):</span>
+                        <span className="text-gray-400">{t('wallet_fee')} ({currentOption.feePercent}%):</span>
                         <span className="text-red-400">-${feeAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
                       </div>
                       <div className="border-t border-white/10 my-2 pt-2 flex justify-between text-base">
-                        <span className="text-gray-300">Neto a Recibir (Est.):</span>
+                        <span className="text-gray-300">{t('wallet_net_receive')}:</span>
                         <span className="text-quantum-success font-bold text-lg">${Math.max(0, netAmount).toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
                       </div>
                    </div>
@@ -253,7 +255,7 @@ const Wallet: React.FC = () => {
                    )}
 
                    <button className="w-full bg-quantum-danger hover:bg-red-600 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-                      <RefreshCw size={18} /> Confirmar Retiro
+                      <RefreshCw size={18} /> {t('wallet_confirm')}
                    </button>
                 </div>
              </div>
