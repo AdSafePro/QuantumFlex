@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Users, Copy, Award, TrendingUp, Lock, Unlock, CheckCircle, AlertCircle, Zap, Activity, BarChart3, ChevronRight, ChevronDown, Network, User, CornerDownRight } from 'lucide-react';
+import { APP_DOMAIN } from '../../constants';
 
 interface ReferralNode {
   id: string;
@@ -275,7 +276,7 @@ const Referrals: React.FC = () => {
           <input 
             type="text" 
             readOnly 
-            value="https://quantumflex.io/ref/USER992" 
+            value={`${APP_DOMAIN}/ref/USER992`}
             className="flex-1 bg-black/50 border border-quantum-accent/50 rounded-lg px-4 py-3 text-quantum-accent font-mono text-sm focus:outline-none focus:ring-2 focus:ring-quantum-accent"
           />
           <button className="bg-quantum-accent text-black px-6 py-3 rounded-lg font-bold hover:bg-white transition-colors flex items-center gap-2 shadow-lg hover:shadow-quantum-accent/50">

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Shield, Lock, Smartphone, Mail, Save } from 'lucide-react';
 
@@ -14,7 +15,7 @@ const SettingsSecurity: React.FC = () => {
           </h2>
           <div>
             <label className="block text-sm text-gray-400 mb-1">Email Registrado</label>
-            <input type="email" value="investor@quantumflex.io" readOnly className="w-full bg-black/50 border border-gray-700 rounded p-2 text-gray-500 cursor-not-allowed" />
+            <input type="email" value="investor@quantumflex.cloud" readOnly className="w-full bg-black/50 border border-gray-700 rounded p-2 text-gray-500 cursor-not-allowed" />
           </div>
           <div>
             <label className="block text-sm text-gray-400 mb-1">Nombre de Usuario</label>

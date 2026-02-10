@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, ShieldCheck, Zap, Globe, Cpu, Bitcoin, Coins } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { APP_VERSION } from '../constants';
 
 const Hero: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({ m: 14, s: 59 });
@@ -170,7 +172,7 @@ const Hero: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-quantum-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-quantum-accent"></span>
             </span>
-            Sistema V3.0 Ahora Activo
+            Sistema V{APP_VERSION} Ahora Activo
           </div>
 
           <h1 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight animate-fade-in-up drop-shadow-lg" style={{ animationDelay: '0.2s' }}>

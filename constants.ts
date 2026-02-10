@@ -2,6 +2,8 @@
 import { Plan, StakingTier } from './types';
 
 export const APP_NAME = "QuantumFlex";
+export const APP_DOMAIN = "https://quantumflex.cloud";
+export const APP_VERSION = "1.8.0";
 
 export const TRADING_PAIRS = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'BNB/USDT', 'XRP/USDT', 'ADA/USDT', 'DOGE/USDT', 'LTC/USDT'];
 export const EXCHANGES = ['Binance', 'Kraken', 'Coinbase', 'KuCoin', 'Huobi', 'OKX', 'Bybit', 'Bitstamp', 'Gate.io'];

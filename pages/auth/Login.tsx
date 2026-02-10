@@ -68,7 +68,7 @@ const Login: React.FC = () => {
                 onChange={handleInputChange}
                 required
                 className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-quantum-accent focus:ring-1 focus:ring-quantum-accent outline-none transition-all"
-                placeholder="inversor@quantum.io"
+                placeholder="inversor@quantumflex.cloud"
               />
             </div>
 
