@@ -1,33 +1,207 @@
 
-PROYECTO: QUANTUMFLEX
-FECHA INICIO: 25 OCT 2023
-VERSION: 1.8.0 (Advanced Lifecycle & Modes)
-ESTADO: EN DESARROLLO
+================================================================================
+PROYECTO MAESTRO: QUANTUMFLEX - ARBITRAJE DE ALTA FRECUENCIA (HFT)
+================================================================================
 
---- REGISTRO DE CAMBIOS Y ACTUALIZACIONES ---
+INFORMACIÓN GENERAL
+-------------------
+Nombre: QuantumFlex
+Versión Actual: 1.8.0 (Release: Advanced Lifecycle & Modes)
+Dominio: quantumflex.cloud
+Stack Tecnológico: React 19, TypeScript, Tailwind CSS, Vite (Frontend) / PHP, MySQL (Backend - En Progreso)
+Estado: Producción / Beta Cerrada
 
-[FASE 3.1: MODOS DE BOTS Y PROBABILIDAD]
-1. CICLOS DE VIDA DE BOTS
-   - Implementados 3 modos de operación por Bot:
-     - Estándar: Ciclo único de 3 horas. Retorno de capital + ganancia al finalizar. Costo activación: $0.
-     - Semi-Perpetuo: Duración 7 días. Pago de ganancia cada 3h. Capital bloqueado hasta el final. Costo: Variable.
-     - Perpetuo: Duración 30 días. Pago de ganancia cada 3h. Capital bloqueado hasta el final. Costo: Variable.
+================================================================================
+1. VISIÓN Y FILOSOFÍA DEL PRODUCTO
+================================================================================
+QuantumFlex es una plataforma de inversión simulada de alta fidelidad que emula operaciones de arbitraje de criptomonedas.
+El objetivo es ofrecer una experiencia de usuario premium, tecnológica y con elementos de gamificación financiera.
 
-2. PROBABILIDAD DE RETORNO (SKEWED ROI)
-   - Lógica de probabilidad implementada: 75% de probabilidad de obtener un ROI en el rango inferior (de la media hacia abajo) y 25% en el rango superior.
-   - Rangos específicos configurados por nivel:
-     - Nivel 1: 0.10%-0.30% (Std), 0.15%-0.35% (Semi), 0.20%-0.40% (Perp).
-     - Nivel 2: 0.40%-0.60% (Std), 0.45%-0.65% (Semi), 0.50%-0.70% (Perp).
-     - Nivel 3: 0.70%-1.00% (Std), 0.75%-1.05% (Semi), 0.80%-1.10% (Perp).
+PILARES DE DISEÑO (UX/UI):
+1. Urgencia y Escasez (FOMO): Uso de contadores, cupos limitados y alertas de "Sold Out" para incentivar la acción rápida.
+2. Estética Cyberpunk/Futurista: Tema oscuro por defecto, acentos neón (Cyan #06b6d4), animaciones de partículas y glassmorphism.
+3. Transparencia Simulada: Visualización de logs de operaciones, hashes de transacciones y tickers en vivo para construir confianza.
 
-3. INTERFAZ DE ACTIVACIÓN
-   - Nuevo Modal de Activación para seleccionar Modo e Inversión.
-   - Cálculo automático de costos de activación (Fee) + Capital.
-   - Visualización de ciclos de 3 horas en la tarjeta del bot.
+================================================================================
+2. LÓGICA DE NEGOCIO: MOTORES DE INVERSIÓN
+================================================================================
 
-[FASE 2.2: SISTEMA DE REFERIDOS]
-   - (Sin cambios en esta versión, mantenida lógica v1.6.0)
+2.1. NIVELES DE BOTS (PLANS)
+El sistema se divide en 3 tiers de bots, cada uno con barreras de entrada y capacidades distintas:
 
---- PRÓXIMOS PASOS ---
-- Integración final con Backend PHP.
-- Base de datos MySQL.
+A) BOT INICIANTE (Micro-HFT)
+   - Objetivo: Usuarios nuevos, prueba de concepto.
+   - Rango Inversión: $10 - $500 USD.
+   - Riesgo: Bajo.
+   - Limitante: Cupos diarios limitados (ej. 1000 ops/día globales).
+   - Costo Slot Extra: $1 USD.
+
+B) QUANTUM ARBITRAGE V2 (Pro)
+   - Objetivo: Inversores intermedios.
+   - Rango Inversión: $500 - $5,000 USD.
+   - Riesgo: Medio (Mayor volatilidad, mayor retorno).
+   - Limitante: Alta demanda, suele estar "Casi Lleno".
+   - Costo Slot Extra: $3 USD.
+
+C) INSTITUTIONAL NODE (Whale)
+   - Objetivo: Grandes capitales.
+   - Rango Inversión: $5,000 - $10,000 USD.
+   - Riesgo: Alto.
+   - Características VIP: Acceso a Mempool, VPS Dedicado.
+   - Costo Slot Extra: $10 USD.
+
+2.2. MODOS DE OPERACIÓN (LIFECYCLES)
+Cada Bot puede configurarse en 3 modos temporales que definen la liquidez del capital:
+
+1. ESTÁNDAR (Ciclo Único)
+   - Duración: 3 Horas.
+   - Costo Activación: $0 (Gratis).
+   - Comportamiento: El capital + ganancias se liberan al saldo disponible al finalizar las 3 horas.
+   - Frecuencia de Pago: Al final del ciclo.
+   - Ideal para: Interés compuesto manual agresivo.
+
+2. SEMI-PERPETUO (7 Días)
+   - Duración: 168 Horas (7 días).
+   - Costo Activación: Variable según nivel ($10 - $200).
+   - Comportamiento: El capital base queda BLOQUEADO por 7 días. Las ganancias se pagan cada 3 horas.
+   - Ventaja: ROI ligeramente superior al estándar (+0.05% base).
+   - Ideal para: Ingresos pasivos semanales sin micro-gestión.
+
+3. PERPETUO (30 Días)
+   - Duración: 720 Horas (30 días).
+   - Costo Activación: Variable según nivel ($20 - $500).
+   - Comportamiento: Capital BLOQUEADO por 30 días. Ganancias pagadas cada 3 horas.
+   - Ventaja: ROI máximo (+0.10% base).
+   - Ideal para: Inversores institucionales, "set and forget".
+
+2.3. MOTOR DE PROBABILIDAD DE RETORNO (SKEWED ROI LOGIC)
+Para mantener la sostenibilidad y el realismo, los retornos no son fijos, sino rangos probabilísticos:
+
+- Regla 75/25:
+  - El 75% de las operaciones caerán en la mitad INFERIOR del rango de ganancia prometido.
+  - El 25% de las operaciones caerán en la mitad SUPERIOR (Lucky trades).
+
+- Tabla de Rangos (Ejemplo Starter):
+  - Estándar: 0.10% - 0.30% por ciclo.
+  - Semi: 0.15% - 0.35% por ciclo.
+  - Perp: 0.20% - 0.40% por ciclo.
+
+================================================================================
+3. SISTEMA DE CAPACIDAD Y STAKING (SLOTS)
+================================================================================
+
+3.1. SLOTS DE OPERACIÓN
+- Concepto: Un usuario no puede activar infinitos bots. Tiene "Slots" (ranuras) de servidor limitadas.
+- Base: Todo usuario comienza con 5 Slots gratuitos.
+- Slots Ocupados: Cada operación activa ocupa 1 Slot.
+- Slots Libres: Necesarios para lanzar nuevas operaciones.
+
+3.2. MECÁNICA DE DESBLOQUEO (STAKING)
+Para obtener más slots, el usuario debe hacer "Staking" (bloqueo) de capital en la plataforma o comprar cupos temporales.
+
+- Tier 0: $0 Stake -> 5 Slots.
+- Tier 1: $100 Stake -> 6 Slots.
+- Tier 2: $300 Stake -> 7 Slots.
+- ...
+- Tier Max: $10,000 Stake -> 10 Slots.
+
+- Beneficio Adicional del Stake: Genera un 1% fijo diario (simulado como rendimiento de validación de nodo).
+
+================================================================================
+4. SISTEMA FINANCIERO (WALLET)
+================================================================================
+
+4.1. DEPÓSITOS
+- Redes Soportadas: TRC20 (Principal), ERC20, BEP20, BTC.
+- Simulación: Generación de QR único y dirección de wallet falsa para la demo.
+- Validación: En producción, requiere webhook de blockchain (1 confirmación).
+
+4.2. RETIROS Y FEES DE PRIORIDAD
+El sistema desincentiva los retiros masivos mediante tiempos de espera o fees por velocidad:
+
+A) RÁPIDO (Priority High)
+   - Tiempo: < 8 Horas.
+   - Fee: 7%.
+   - Mensaje: "Procesamiento prioritario en mempool".
+
+B) MODERADO (Standard)
+   - Tiempo: < 24 Horas.
+   - Fee: 3%.
+
+C) GRATUITO (Low)
+   - Tiempo: < 72 Horas (3 días).
+   - Fee: 0%.
+   - Estrategia: Incentiva a mantener el dinero en la plataforma.
+
+4.3. REGLAS DE SEGURIDAD
+- Retiros a monedas volátiles (BTC, ETH) muestran advertencia de fluctuación de precio.
+- Requiere 2FA obligatorio si está activo.
+- Bloqueo de retiros si se detecta actividad sospechosa (Admin toggle).
+
+================================================================================
+5. SISTEMA DE REFERIDOS: "QUANTUM NETWORK" (MLM)
+================================================================================
+
+Estructura de árbol de 8 niveles de profundidad (Unilevel).
+Para desbloquear las comisiones de los niveles profundos, el usuario debe cumplir requisitos híbridos.
+
+5.1. NIVELES Y REQUISITOS
+- Nivel 1 (5%): Sin requisitos. Acceso inmediato.
+- Nivel 2 (4%): Req: Depósito Activo O (5 Referidos Directos + $200 Volumen de Red).
+- Nivel 3 (3%): Req: Depósito Activo Y (10 Refs + $500 Vol).
+... hasta Nivel 8.
+
+5.2. REGLA DE "DEPÓSITO ACTIVO"
+Para cobrar comisiones de Nivel 2 en adelante, el usuario DEBE tener al menos una inversión activa propia. Esto evita cuentas "sanguijuela" que solo retiran comisiones sin aportar liquidez.
+
+================================================================================
+6. ADMINISTRACIÓN (GOD MODE)
+================================================================================
+
+Panel exclusivo accesible vía `/admin` (Credenciales Hardcoded en Demo: admin / Millonarios2026**).
+
+CAPACIDADES:
+1. Gestión de Usuarios:
+   - Ver lista completa, filtrar por email/nombre.
+   - Editar saldo manualmente (Crédito/Débito) -> Genera transacción tipo "Adjustment".
+   - Bloquear/Desbloquear acceso (KYC simulado).
+   - Resetear contraseñas.
+
+2. Aprobación de Retiros:
+   - Lista de cola de retiros pendientes.
+   - Botones Aprobar (Genera TX Hash falso) / Rechazar (Devuelve saldo al usuario).
+
+3. Soporte (Chat):
+   - Sistema de tickets en tiempo real.
+   - Admin puede responder mensajes, cerrar tickets o cambiar estado.
+
+================================================================================
+7. PSICOLOGÍA DE USUARIO Y NOTIFICACIONES
+================================================================================
+
+7.1. SOCIAL PROOF (TOASTS)
+- Componente emergente en la esquina inferior.
+- Muestra mensajes falsos/reales: "Juan P. acaba de retirar $500", "Maria L. activó Bot Whale".
+- Objetivo: Generar confianza y sentido de actividad comunitaria.
+
+7.2. LÓGICA DE ESCASEZ
+- En el registro: "Solo 3 cupos disponibles hoy".
+- En los planes: Barras de progreso visualizando "Sold Out".
+- En el Hero: Contador regresivo para el "Cierre de oferta".
+
+================================================================================
+8. HOJA DE RUTA TÉCNICA (ROADMAP)
+================================================================================
+
+FASE ACTUAL (1.8.0):
+[x] Frontend React Completo.
+[x] Lógica de Simulación de Bots.
+[x] Sistema de Referidos Visual.
+[x] Panel de Admin Básico.
+
+FASE SIGUIENTE (2.0.0 - Backend Integration):
+[ ] Migración de `localStorage` a base de datos MySQL.
+[ ] API REST en PHP (Laravel o Slim).
+[ ] Websockets para el Chat de Soporte y Ticker en vivo real.
+[ ] Integración con API de TronGrid para validación real de USDT.
+[ ] Sistema de KYC automatizado.
